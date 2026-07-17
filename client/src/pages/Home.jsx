@@ -25,17 +25,17 @@ const categorySections = [
     items: [
       { title: "Intense cleaning (2 bathrooms)", rating: "4.80 (6.3M)", price: "₹858", oldPrice: "₹898", img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&q=80" },
       { title: "Intense cleaning (3 bathrooms)", rating: "4.80 (6.3M)", price: "₹1,227", oldPrice: "₹1,347", img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=80" },
-      { title: "Pest control (includes utensil removal)", rating: "4.79 (163K)", price: "₹1,249", img: "https://images.unsplash.com/photo-1540968221243-29f5d70440f3?w=400&q=80" },
-      { title: "Fridge cleaning", rating: "4.83 (158K)", price: "₹399", img: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400&q=80" },
+      { title: "Pest control (includes utensil removal)", rating: "4.79 (163K)", price: "₹1,249", img: "/services/pest_control.png" },
+      { title: "Fridge cleaning", rating: "4.83 (158K)", price: "₹399", img: "/services/fridge_cleaning.png" },
     ]
   },
   {
     title: "Appliance repair & service",
     subtitle: "",
     items: [
-      { title: "Foam-jet AC service", rating: "4.75 (2.8M)", price: "₹599", img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&q=80" },
-      { title: "AC repair", rating: "4.73 (842K)", price: "₹299", img: "https://images.unsplash.com/photo-1558404987-a22a319f05a9?w=400&q=80" },
-      { title: "Foam-jet service (2 ACs)", rating: "4.75 (2.8M)", price: "₹1,098", oldPrice: "₹1,198", img: "https://images.unsplash.com/photo-1621905252507-b35492d90cb4?w=400&q=80" },
+      { title: "Foam-jet AC service", rating: "4.75 (2.8M)", price: "₹599", img: "/services/ac_repair.png" },
+      { title: "AC repair", rating: "4.73 (842K)", price: "₹299", img: "/services/ac_repair.png" },
+      { title: "Foam-jet service (2 ACs)", rating: "4.75 (2.8M)", price: "₹1,098", oldPrice: "₹1,198", img: "/services/ac_repair.png" },
       { title: "TV check-up", rating: "4.77 (174K)", price: "₹249", img: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" },
     ]
   },
@@ -45,8 +45,8 @@ const categorySections = [
     items: [
       { title: "Fan repair", rating: "4.80 (166K)", price: "₹149", img: "https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?w=400&q=80" },
       { title: "Decor installation", rating: "4.84 (149K)", price: "₹79", img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&q=80" },
-      { title: "Electrician consultation", rating: "4.74 (150K)", price: "₹49", img: "https://images.unsplash.com/photo-1588698114006-03c00eddf9a7?w=400&q=80" },
-      { title: "Plumber consultation", rating: "4.74 (182K)", price: "₹49", img: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&q=80" },
+      { title: "Electrician consultation", rating: "4.74 (150K)", price: "₹49", img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&q=80" },
+      { title: "Plumber consultation", rating: "4.74 (182K)", price: "₹49", img: "/services/plumber.png" },
     ]
   }
 ];

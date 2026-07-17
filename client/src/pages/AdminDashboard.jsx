@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   
   const fetchPendingUsers = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/pending-users');
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/pending-users`);
       const data = await res.json();
       if (res.ok) setPendingUsers(data);
     } catch (err) {
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/all-users');
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/all-users`);
       const data = await res.json();
       if (res.ok) setAllUsers(data);
     } catch (err) {
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/approve-user/${id}`, { method: 'PUT' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/approve-user/${id}`, { method: 'PUT' });
       if (res.ok) {
         setPendingUsers(prev => prev.filter(u => u._id !== id));
         fetchAllUsers(); // refresh table
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
 
   const handleReject = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/reject-user/${id}`, { method: 'PUT' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/reject-user/${id}`, { method: 'PUT' });
       if (res.ok) {
         setPendingUsers(prev => prev.filter(u => u._id !== id));
         fetchAllUsers();
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
   const handleBlock = async (id) => {
     if (!window.confirm('Are you sure you want to toggle block status for this user?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/block-user/${id}`, { method: 'PUT' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/block-user/${id}`, { method: 'PUT' });
       if (res.ok) fetchAllUsers();
     } catch (err) {
       console.error(err);
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('WARNING: This will permanently delete the user. Proceed?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/delete-user/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/delete-user/${id}`, { method: 'DELETE' });
       if (res.ok) fetchAllUsers();
     } catch (err) {
       console.error(err);
@@ -118,7 +118,7 @@ const AdminDashboard = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/update-user/${editingUser._id}`, { 
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/update-user/${editingUser._id}`, { 
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editingUser)
