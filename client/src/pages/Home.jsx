@@ -21,25 +21,25 @@ const POPULAR_SERVICES = [
     name: 'AC Repair', 
     rating: '4.7 (1.2k)', 
     price: '₹499', 
-    img: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=400' 
+    img: '/images/ac_repair.png' 
   },
   { 
     name: 'Deep Cleaning', 
     rating: '4.6 (980)', 
     price: '₹799', 
-    img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=400' 
+    img: '/images/deep_cleaning.png' 
   },
   { 
     name: 'Plumbing', 
     rating: '4.7 (1.1k)', 
     price: '₹399', 
-    img: 'https://images.unsplash.com/photo-1607472586893-edb57cbce4ea?auto=format&fit=crop&q=80&w=400' 
+    img: '/images/plumbing.png' 
   },
   { 
     name: 'Electrician', 
     rating: '4.8 (1.3k)', 
     price: '₹299', 
-    img: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400' 
+    img: '/images/electrician.png' 
   }
 ];
 
@@ -79,10 +79,10 @@ const timeline = [
 ];
 
 const products = [
-  { name: 'LG 1.5 Ton 5 Star AI Dual Inverter Split AC', price: 'Γé╣39,999', rating: '4.9', img: 'https://images.unsplash.com/photo-1627986064973-2e069504c5dc?q=80&w=400' },
-  { name: 'Dyson V12 Detect Slim Absolute Vacuum', price: 'Γé╣55,900', rating: '4.8', img: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?q=80&w=400' },
-  { name: 'Kent Supreme RO Water Purifier', price: 'Γé╣14,500', rating: '4.7', img: 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?q=80&w=400' },
-  { name: 'Philips Hue Smart Bulb Starter Kit', price: 'Γé╣8,999', rating: '4.9', img: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=400' },
+  { name: 'LG 1.5 Ton 5 Star AI Dual Inverter Split AC', price: '₹39,999', rating: '4.9', img: '/images/lg_ac.png' },
+  { name: 'Dyson V12 Detect Slim Absolute Vacuum', price: '₹55,900', rating: '4.8', img: '/images/dyson_vacuum.png' },
+  { name: 'Kent Supreme RO Water Purifier', price: '₹14,500', rating: '4.7', img: '/images/kent_ro.png' },
+  { name: 'Philips Hue Smart Bulb Starter Kit', price: '₹8,999', rating: '4.9', img: '/images/philips_hue.png' },
 ];
 
 const reviews = [

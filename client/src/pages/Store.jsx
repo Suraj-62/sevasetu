@@ -15,7 +15,7 @@ const PRODUCTS = [
     rating: 4.8,
     reviews: 342,
     vendor: 'Gupta Electronics',
-    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&q=80&w=600',
+    image: '/images/lg_ac.png',
     tag: 'Bestseller'
   },
   {
@@ -27,7 +27,7 @@ const PRODUCTS = [
     rating: 4.6,
     reviews: 128,
     vendor: 'PureWater Solutions',
-    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=600',
+    image: '/images/kent_ro.png',
     tag: 'Free Installation'
   },
   {
