@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ShoppingCart, Star, Check, Sparkles, Plus, ChevronLeft, Store as StoreIcon } from 'lucide-react';
+import { Search, ShoppingCart, Star, Check, Sparkles, Plus, ChevronLeft, Store as StoreIcon, ShieldCheck, Tag } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const CATEGORIES = ['All', 'Air Conditioners', 'RO Purifiers', 'Televisions', 'Electrical Parts', 'Plumbing', 'Smart Home'];
@@ -100,179 +100,196 @@ const Store = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleAddToCart = (product) => {
+  const addToCart = (product) => {
     setCart([...cart, product]);
-    setToastMessage(`${product.name} added to cart!`);
+    setToastMessage(`Added ${product.name} to cart`);
     setTimeout(() => setToastMessage(''), 3000);
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans pb-24 pt-32">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans pb-24">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <motion.div 
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          className="fixed bottom-6 right-0 left-0 mx-auto w-fit z-50 bg-slate-900 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-3 border border-slate-700"
-        >
-          <div className="bg-emerald-500 rounded-full p-1"><Check size={14} className="text-white" /></div>
-          <span className="font-bold text-sm pr-2">{toastMessage}</span>
-          <div className="w-px h-4 bg-slate-700"></div>
-          <button onClick={() => navigate('/cart')} className="text-blue-400 font-bold text-sm hover:text-blue-300 transition-colors">
-            View Cart ({cart.length})
-          </button>
-        </motion.div>
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-[#0F172A] text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-2">
+          <Check size={18} className="text-[#0F766E]" />
+          <span className="font-medium">{toastMessage}</span>
+        </div>
       )}
 
-      {/* Modern Sticky Header */}
-      <div className="fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-40 flex items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="w-10 h-10 bg-gray-50 hover:bg-gray-100 rounded-full flex items-center justify-center text-gray-700 transition-colors border border-gray-200">
-          <ChevronLeft size={20} />
-        </Link>
-        <h1 className="text-lg font-black text-gray-900 tracking-tight">Seva<span className="text-blue-600">Store</span></h1>
-        <button className="relative w-10 h-10 bg-gray-50 hover:bg-gray-100 rounded-full flex items-center justify-center text-gray-700 transition-colors border border-gray-200">
-          <ShoppingCart size={18} />
-          {cart.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">
-              {cart.length}
-            </span>
-          )}
-        </button>
-      </div>
-
-      <div className="max-w-4xl mx-auto pt-24 px-4 sm:px-6">
-        
-        {/* Modern Hero Banner */}
-        <div className="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden mb-8 shadow-xl shadow-indigo-900/10">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-          <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-          
-          <div className="relative z-10 sm:w-2/3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider border border-white/20 mb-4">
-              <Sparkles size={12} className="text-blue-400" /> Premium Deals
+      {/* Top Navbar */}
+      <div className="bg-white border-b border-[#E2E8F0] sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors">
+              <ChevronLeft size={20} />
+            </Link>
+            <div className="flex items-center gap-2">
+              <StoreIcon className="text-[#0F766E]" size={28} />
+              <span className="text-2xl font-black text-[#0F172A] tracking-tight">SevaStore</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight mb-3">
-              Equip Your Home <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Like A Pro.</span>
-            </h2>
-            <p className="text-slate-300 text-sm sm:text-base font-medium mb-6 max-w-sm">
-              Genuine appliances & spare parts directly from trusted local vendors.
-            </p>
           </div>
           
-          <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=400" alt="Appliance" className="hidden sm:block absolute right-4 -bottom-12 w-48 h-64 object-cover rounded-2xl rotate-12 shadow-2xl border-4 border-white/10" />
+          <div className="hidden md:flex flex-1 max-w-xl mx-8 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <input 
+              type="text"
+              placeholder="Search appliances, spare parts, tools..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors font-medium"
+            />
+          </div>
+
+          <div className="relative cursor-pointer">
+            <div className="w-12 h-12 rounded-full bg-[#0F766E]/10 flex items-center justify-center text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-colors">
+              <ShoppingCart size={24} />
+            </div>
+            {cart.length > 0 && (
+              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">
+                {cart.length}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        
+        {/* Promotional Hero Banner */}
+        <div className="bg-[#0F172A] rounded-3xl p-8 lg:p-12 mb-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden shadow-2xl">
+          <div className="absolute -right-20 -top-40 opacity-10 blur-3xl pointer-events-none">
+            <div className="w-96 h-96 bg-[#0F766E] rounded-full"></div>
+          </div>
+          <div className="relative z-10 md:w-2/3">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0F766E]/20 text-teal-300 font-bold text-sm mb-6 border border-[#0F766E]/30">
+              <Tag size={16} /> Big Savings Days
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+              Upgrade Your Home with <br /> Genuine Appliances.
+            </h1>
+            <p className="text-slate-400 text-lg mb-8 max-w-lg">
+              Get up to 50% off on top electronics, RO purifiers, and home essentials. Authentic products delivered directly from verified local vendors.
+            </p>
+            <button className="bg-[#0F766E] hover:bg-[#115E59] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all flex items-center gap-2">
+              Explore Deals <ChevronRight size={20} />
+            </button>
+          </div>
+          <div className="relative z-10 hidden md:block w-1/3">
+            <img src="https://images.unsplash.com/photo-1627986064973-2e069504c5dc?auto=format&fit=crop&q=80&w=400" alt="AC" className="w-full max-w-xs mx-auto drop-shadow-2xl rounded-2xl transform rotate-3" />
+          </div>
         </div>
 
-        {/* Global Search Bar (Native App Style) */}
-        <div className="relative mb-8">
-          <input 
-            type="text" 
-            placeholder="Search products, brands, parts..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 rounded-2xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium bg-white shadow-sm text-gray-900 text-sm"
-          />
-          <Search className="absolute left-4 top-4 text-gray-400" size={20} />
+        {/* Top Vendors */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-black text-[#0F172A] mb-6 flex items-center gap-2">
+            <ShieldCheck className="text-[#0F766E]" /> Trusted Local Sellers
+          </h2>
+          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            {TOP_SHOPS.map(shop => (
+              <Link to={`/shop/${shop.id}`} key={shop.id} className="flex flex-col items-center group min-w-[100px]">
+                <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg overflow-hidden mb-3 group-hover:border-[#0F766E] transition-all duration-300 group-hover:scale-110">
+                  <img src={shop.img} alt={shop.name} className="w-full h-full object-cover" />
+                </div>
+                <h3 className="font-bold text-sm text-[#0F172A] truncate w-24 text-center">{shop.name}</h3>
+                <p className="text-xs font-semibold text-[#0F766E] flex items-center gap-1 mt-1">
+                  <Star size={12} className="fill-[#0F766E]" /> {shop.rating}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
 
-        {/* Categories (Horizontal Pills) */}
-        <div className="flex overflow-x-auto hide-scrollbar gap-3 mb-10 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+        {/* Categories Navigation */}
+        <div className="flex gap-3 overflow-x-auto pb-6 mb-8 scrollbar-hide">
           {CATEGORIES.map(cat => (
-            <button 
+            <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeCategory === cat ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'}`}
+              className={`px-6 py-3 rounded-xl font-bold whitespace-nowrap transition-all duration-300 ${
+                activeCategory === cat 
+                ? 'bg-[#0F172A] text-white shadow-lg scale-105' 
+                : 'bg-white text-[#475569] hover:bg-slate-50 border border-[#E2E8F0]'
+              }`}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        {/* Explore Shops (Story Style) */}
-        {activeCategory === 'All' && !searchQuery && (
-          <div className="mb-10">
-            <h3 className="text-lg font-black text-gray-900 mb-4">Explore Local Shops</h3>
-            <div className="flex overflow-x-auto hide-scrollbar gap-6 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
-              {TOP_SHOPS.map(shop => (
-                <Link to={`/shop/${shop.id}`} key={shop.id} className="flex flex-col items-center gap-2 group min-w-[72px]">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-0.5 bg-gradient-to-tr from-blue-500 to-emerald-400 group-hover:scale-105 transition-transform duration-300 shadow-sm">
-                    <img src={shop.img} alt={shop.name} className="w-full h-full object-cover rounded-full border-2 border-white" />
-                  </div>
-                  <span className="text-xs font-bold text-gray-700 text-center line-clamp-1 max-w-[80px]">{shop.name}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Product Grid */}
-        <div className="mb-6">
-          <h3 className="text-lg font-black text-gray-900 mb-4">{activeCategory === 'All' ? 'Recommended for You' : activeCategory}</h3>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-            {filteredProducts.map(product => (
+        {/* Products Grid */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-black text-[#0F172A] mb-6">
+            {activeCategory === 'All' ? 'Recommended for You' : `${activeCategory} Products`}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {filteredProducts.map((product, i) => (
               <motion.div 
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
                 key={product.id} 
-                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow group flex flex-col border border-gray-100"
+                className="bg-white rounded-3xl border border-[#E2E8F0] overflow-hidden group hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-300 flex flex-col"
               >
-                <div className="h-36 sm:h-48 overflow-hidden relative bg-gray-50 p-3">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500" />
+                <div className="relative h-56 bg-[#F8FAFC] p-4 flex items-center justify-center overflow-hidden">
                   {product.tag && (
-                    <div className="absolute top-5 left-5 bg-white/90 backdrop-blur-md text-gray-900 text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
+                    <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur text-[#0F172A] px-3 py-1 rounded-lg text-xs font-black tracking-wide border border-slate-100 shadow-sm">
                       {product.tag}
                     </div>
                   )}
+                  <img 
+                    src={product.image} 
+                    alt={product.name} 
+                    className="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500" 
+                  />
                 </div>
+                
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="flex items-center gap-1 text-sm font-bold text-amber-500 mb-3">
+                    <Star size={14} className="fill-amber-500" /> {product.rating} 
+                    <span className="text-slate-400 font-medium ml-1">({product.reviews})</span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-[#0F172A] leading-tight mb-2 flex-1">
+                    {product.name}
+                  </h3>
+                  
+                  <Link to={`/shop/${product.id}`} className="flex items-center gap-2 text-sm text-[#64748B] font-medium hover:text-[#0F766E] transition-colors mb-4">
+                    <StoreIcon size={14} /> {product.vendor}
+                  </Link>
 
-                <div className="p-3 sm:p-5 flex-1 flex flex-col">
-                  <div className="flex items-center gap-1 mb-1">
-                    <Star className="fill-yellow-400 text-yellow-400" size={10} />
-                    <span className="text-[10px] font-black text-gray-900">{product.rating}</span>
-                  </div>
-                  
-                  <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 leading-snug line-clamp-2 flex-1">{product.name}</h3>
-                  
-                  <div className="flex items-center justify-between mt-2 mb-3">
-                    <p className="text-[10px] sm:text-xs text-gray-500 font-medium flex items-center gap-1 truncate pr-2">
-                      <StoreIcon size={12} className="text-gray-400" /> {product.vendor}
-                    </p>
-                    <Link to="/shop/1" className="shrink-0 text-[9px] sm:text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors">
-                      Visit
-                    </Link>
-                  </div>
-                  
-                  <div className="flex items-end justify-between mt-auto border-t border-gray-50 pt-3">
+                  <div className="flex items-end justify-between mt-auto">
                     <div>
-                      <p className="text-[10px] text-gray-400 line-through font-bold mb-0.5">₹{product.originalPrice.toLocaleString()}</p>
-                      <p className="text-base sm:text-lg font-black text-gray-900 tracking-tight">₹{product.price.toLocaleString()}</p>
+                      <p className="text-xs text-slate-400 font-medium line-through mb-1">
+                        ₹{product.originalPrice.toLocaleString()}
+                      </p>
+                      <p className="text-2xl font-black text-[#0F766E]">
+                        ₹{product.price.toLocaleString()}
+                      </p>
                     </div>
                     <button 
-                      onClick={() => handleAddToCart(product)}
-                      className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-colors"
+                      onClick={() => addToCart(product)}
+                      className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-[#0F766E] text-[#0F172A] hover:text-white flex items-center justify-center transition-all duration-300 border border-[#E2E8F0] hover:border-transparent"
                     >
-                      <Plus strokeWidth={3} size={18} />
+                      <Plus size={20} className="font-bold" />
                     </button>
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-20">
+              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="text-slate-400" size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-[#0F172A] mb-2">No products found</h3>
+              <p className="text-[#64748B]">Try searching for something else or browse another category.</p>
+            </div>
+          )}
         </div>
-
       </div>
-
-      <style jsx>{`
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </div>
   );
 };

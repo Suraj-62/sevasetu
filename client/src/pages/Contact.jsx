@@ -41,7 +41,7 @@ const Contact = () => {
               <div>
                 <h4 className="text-lg font-bold mb-1">Email Us</h4>
                 <p className="text-[#475569] mb-2">Our friendly team is here to help.</p>
-                <a href="mailto:support@sevasetu.com" className="text-[#0F766E] font-medium hover:underline">support@sevasetu.com</a>
+                <a href="mailto:mishrasuraj6299@gmail.com" className="text-[#0F766E] font-medium hover:underline">mishrasuraj6299@gmail.com</a>
               </div>
             </motion.div>
 
@@ -55,7 +55,7 @@ const Contact = () => {
               <div>
                 <h4 className="text-lg font-bold mb-1">Call Us</h4>
                 <p className="text-[#475569] mb-2">Mon-Fri from 9am to 6pm.</p>
-                <a href="tel:+919876543210" className="text-[#0F766E] font-medium hover:underline">+91 98765 43210</a>
+                <a href="tel:+916299323274" className="text-[#0F766E] font-medium hover:underline">+91 62993 23274</a>
               </div>
             </motion.div>
 

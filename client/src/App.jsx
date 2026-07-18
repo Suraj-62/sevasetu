@@ -24,8 +24,9 @@ const AppContent = () => {
   const isStoreApp = location.pathname === '/store' || location.pathname.startsWith('/shop/');
   const isAuth = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/verification-pending';
   const isServices = location.pathname.startsWith('/services');
+  const isNoFooterPage = ['/about', '/contact'].includes(location.pathname);
   const hideNav = isDashboard || isStoreApp || isAuth;
-  const hideFooter = isDashboard || isStoreApp || isAuth || isServices;
+  const hideFooter = isDashboard || isStoreApp || isAuth || isServices || isNoFooterPage;
 
   return (
     <div className="flex flex-col min-h-screen">
