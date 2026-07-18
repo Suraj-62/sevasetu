@@ -21,8 +21,8 @@ const ServicesList = () => {
     : mockServices.filter(s => s.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-8 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#F8FAFC] pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1400px] mx-auto">
         
         {/* Header & Search */}
         <div className="mb-10">

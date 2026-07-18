@@ -92,13 +92,13 @@ const Home = () => {
               </div>
               <h1 className="text-5xl lg:text-7xl font-black text-[#0F172A] leading-[1.1] tracking-tight mb-6">
                 Trusted Home Services,<br/>
-                <span className="text-[#2563EB]">Delivered at Your Doorstep.</span>
+                <span className="text-[#0F766E]">Delivered at Your Doorstep.</span>
               </h1>
               <p className="text-xl text-[#64748B] font-medium mb-10 max-w-lg leading-relaxed">
                 Book verified professionals, buy home products, track technicians live, and manage warranties, all in one place.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link to="/services" className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2">
+                <Link to="/services" className="bg-[#0F766E] hover:bg-[#115E59] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2">
                   Book Service <ArrowRight size={20} />
                 </Link>
                 <Link to="/store" className="bg-white hover:bg-slate-50 text-[#0F172A] border-2 border-slate-200 px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center gap-2 hover:-translate-y-1">
@@ -127,7 +127,7 @@ const Home = () => {
         <section className="max-w-4xl mx-auto px-6 mb-24">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-[2rem] p-8 shadow-xl border border-slate-100 text-center">
             <h2 className="text-2xl font-black text-[#0F172A] mb-6 flex items-center justify-center gap-3">
-              <Search className="text-[#2563EB]" size={28} /> What service do you need today?
+              <Search className="text-[#0F766E]" size={28} /> What service do you need today?
             </h2>
             <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto mb-6">
               <input 
@@ -135,9 +135,9 @@ const Home = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for AC Repair, Cleaning, Plumber..." 
-                className="w-full pl-6 pr-32 py-5 bg-[#F8FAFC] border-2 border-slate-100 rounded-2xl text-lg font-semibold focus:outline-none focus:border-[#2563EB] transition-colors"
+                className="w-full pl-6 pr-32 py-5 bg-[#F8FAFC] border-2 border-slate-100 rounded-2xl text-lg font-semibold focus:outline-none focus:border-[#0F766E] transition-colors"
               />
-              <button type="submit" className="absolute right-2 top-2 bottom-2 bg-[#2563EB] text-white px-8 rounded-xl font-bold hover:bg-[#1D4ED8] transition-colors">
+              <button type="submit" className="absolute right-2 top-2 bottom-2 bg-[#0F766E] text-white px-8 rounded-xl font-bold hover:bg-[#115E59] transition-colors">
                 Search
               </button>
             </form>
@@ -181,7 +181,7 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {usps.map((usp, i) => (
                 <div key={i} className="flex gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0F766E] flex items-center justify-center shrink-0">
                     <usp.icon size={28} />
                   </div>
                   <div>
@@ -203,7 +203,7 @@ const Home = () => {
              <div className="grid grid-cols-2 lg:grid-cols-6 gap-8 relative z-10">
                {timeline.map((step, i) => (
                  <div key={i} className="flex flex-col items-center text-center">
-                   <div className="w-20 h-20 rounded-full bg-white border-4 border-slate-50 shadow-xl flex items-center justify-center text-2xl font-black text-[#2563EB] mb-6 ring-8 ring-[#F8FAFC]">
+                   <div className="w-20 h-20 rounded-full bg-white border-4 border-slate-50 shadow-xl flex items-center justify-center text-2xl font-black text-[#0F766E] mb-6 ring-8 ring-[#F8FAFC]">
                      {step.step}
                    </div>
                    <h3 className="text-lg font-black text-[#0F172A] mb-1">{step.title}</h3>
@@ -221,7 +221,7 @@ const Home = () => {
               <h2 className="text-4xl font-black text-[#0F172A] mb-2">Featured Products</h2>
               <p className="text-lg text-[#64748B] font-semibold">Buy genuine spare parts and appliances directly from us.</p>
             </div>
-            <Link to="/store" className="hidden md:flex items-center gap-2 text-[#2563EB] font-bold hover:text-[#1D4ED8] transition-colors">
+            <Link to="/store" className="hidden md:flex items-center gap-2 text-[#0F766E] font-bold hover:text-[#115E59] transition-colors">
               View Marketplace <ArrowRight size={20} />
             </Link>
           </div>
@@ -241,7 +241,7 @@ const Home = () => {
                     </div>
                   </div>
                   <div className="flex items-center justify-between mt-auto">
-                    <span className="text-xl font-black text-[#2563EB]">{prod.price}</span>
+                    <span className="text-xl font-black text-[#0F766E]">{prod.price}</span>
                     <button className="bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors">Buy Now</button>
                   </div>
                 </div>
@@ -251,7 +251,7 @@ const Home = () => {
         </section>
 
         {/* 7. Trusted Statistics */}
-        <section className="bg-[#2563EB] text-white py-20 mb-24">
+        <section className="bg-[#0F766E] text-white py-20 mb-24">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
               {[
@@ -295,7 +295,7 @@ const Home = () => {
               <div className="relative z-10">
                 <h3 className="text-3xl font-black mb-4">Earn More as a Technician</h3>
                 <p className="text-slate-400 font-medium mb-8 max-w-sm text-lg">Join our fleet of verified professionals, get flexible hours, and multiply your earnings.</p>
-                <button className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-8 py-4 rounded-xl font-bold transition-colors">Join as Technician</button>
+                <button className="bg-[#0F766E] hover:bg-[#115E59] text-white px-8 py-4 rounded-xl font-bold transition-colors">Join as Technician</button>
               </div>
             </div>
             
@@ -370,7 +370,7 @@ const Home = () => {
             <div className="relative z-10">
               <h2 className="text-4xl lg:text-6xl font-black mb-6 leading-tight">Ready to simplify <br/>your home services?</h2>
               <p className="text-xl text-slate-400 font-semibold mb-10 max-w-2xl mx-auto">Join thousands of happy customers who rely on our verified professionals every single day.</p>
-              <Link to="/login" className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-10 py-5 rounded-2xl font-black text-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all inline-block">
+              <Link to="/login" className="bg-[#0F766E] hover:bg-[#115E59] text-white px-10 py-5 rounded-2xl font-black text-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all inline-block">
                 Get Started Now
               </Link>
             </div>

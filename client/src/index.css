@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
-  --color-success: #10B981;
+  --color-primary: #0F766E;
+  --color-primary-hover: #115E59;
+  --color-success: #22C55E;
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
   --color-background: #F8FAFC;
@@ -42,9 +42,9 @@ body {
 
 .nav-item-active {
   background-color: #EFF6FF;
-  color: #2563EB;
+  color: #0F766E;
 }
 
 .nav-item-active svg {
-  color: #2563EB;
+  color: #0F766E;
 }

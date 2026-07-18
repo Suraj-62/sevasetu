@@ -99,11 +99,11 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
                       onClick={() => handleNavClick(item.onClick)}
                       className={`w-full flex items-center px-4 py-3 font-semibold rounded-2xl transition-all text-[13px] group ${
                         isActive 
-                        ? 'bg-[#EFF6FF] text-[#2563EB]' 
+                        ? 'bg-[#EFF6FF] text-[#0F766E]' 
                         : 'text-slate-600 hover:bg-[#F8FAFC] hover:text-slate-900'
                       }`}
                     >
-                      <item.icon size={18} className={`mr-3 transition-colors ${isActive ? 'text-[#2563EB]' : 'text-slate-400 group-hover:text-[#2563EB]'}`} /> {item.name}
+                      <item.icon size={18} className={`mr-3 transition-colors ${isActive ? 'text-[#0F766E]' : 'text-slate-400 group-hover:text-[#0F766E]'}`} /> {item.name}
                     </button>
                   )}
                 </li>

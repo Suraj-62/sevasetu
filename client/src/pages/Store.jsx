@@ -107,7 +107,7 @@ const Store = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] font-sans pb-24">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans pb-24 pt-32">
       
       {/* Toast Notification */}
       {toastMessage && (

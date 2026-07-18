@@ -225,7 +225,7 @@ const CustomerDashboard = () => {
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
                     <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(val) => `₹${val/1000}k`} />
                     <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                    <Line type="monotone" dataKey="spend" stroke="#2563EB" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="spend" stroke="#0F766E" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
