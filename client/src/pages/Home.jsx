@@ -103,6 +103,38 @@ const Home = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [openFaq, setOpenFaq] = useState(0);
+  const [locationName, setLocationName] = useState('New Delhi');
+  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
+
+  const fetchLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+    
+    setIsFetchingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const data = await res.json();
+          const city = data.address.city || data.address.town || data.address.village || data.address.state_district || 'Your Location';
+          setLocationName(city);
+        } catch (error) {
+          console.error("Error fetching location details:", error);
+          setLocationName("Location Found");
+        } finally {
+          setIsFetchingLocation(false);
+        }
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        alert('Please allow location access in your browser settings.');
+        setIsFetchingLocation(false);
+      }
+    );
+  };
 
 
   const handleSearch = (e) => {
@@ -146,9 +178,11 @@ const Home = () => {
                 />
               </div>
               <div className="flex items-center gap-4 px-4 py-3 sm:py-0 w-full sm:w-auto justify-between">
-                <div className="flex items-center gap-2 cursor-pointer text-[#0F172A] font-medium">
+                <div onClick={fetchLocation} className="flex items-center gap-2 cursor-pointer text-[#0F172A] font-medium hover:text-[#0F766E] transition-colors">
                   <MapPin size={18} className="text-[#0F766E]" />
-                  <span>New Delhi</span>
+                  <span className="whitespace-nowrap max-w-[100px] truncate" title={locationName}>
+                    {isFetchingLocation ? 'Fetching...' : locationName}
+                  </span>
                   <ChevronDown size={16} className="text-slate-400" />
                 </div>
                 <button type="submit" className="bg-[#0F766E] hover:bg-[#115E59] text-white px-6 py-3 rounded-xl font-bold transition-colors">
