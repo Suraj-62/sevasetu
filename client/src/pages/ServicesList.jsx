@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Filter, Star, Clock } from 'lucide-react';
 import { useState } from 'react';
 
@@ -15,6 +15,17 @@ const categories = ['All', 'Electrician', 'Plumbing', 'AC Repair', 'Cleaning', '
 
 const ServicesList = () => {
   const [activeCategory, setActiveCategory] = useState('All');
+  const navigate = useNavigate();
+
+  const handleBook = (e) => {
+    e.preventDefault();
+    const userInfo = localStorage.getItem('userInfo');
+    if (!userInfo) {
+      navigate('/login?redirect=/book');
+    } else {
+      navigate('/book');
+    }
+  };
 
   const filteredServices = activeCategory === 'All' 
     ? mockServices 
@@ -98,9 +109,9 @@ const ServicesList = () => {
                   
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                     <span className="text-2xl font-bold text-gray-900">{service.price}</span>
-                    <Link to="/book" className="bg-teal-50 text-[#0F766E] hover:bg-[#0F766E] hover:text-white px-6 py-2 rounded-full font-medium transition-colors">
+                    <button onClick={handleBook} className="bg-teal-50 text-[#0F766E] hover:bg-[#0F766E] hover:text-white px-6 py-2 rounded-full font-medium transition-colors">
                       Book Now
-                    </Link>
+                    </button>
                   </div>
                 </motion.div>
               ))}

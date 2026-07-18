@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, ShieldCheck, CheckCircle, Eye, EyeOff } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirect = new URLSearchParams(location.search).get('redirect');
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,10 +38,14 @@ const Login = () => {
       
       localStorage.setItem('userInfo', JSON.stringify(data));
       
-      if (data.role === 'admin') navigate('/dashboard/admin');
-      else if (data.role === 'technician') navigate('/dashboard/technician');
-      else if (data.role === 'vendor') navigate('/dashboard/vendor');
-      else navigate('/dashboard/customer');
+      if (redirect) {
+        navigate(redirect);
+      } else {
+        if (data.role === 'admin') navigate('/dashboard/admin');
+        else if (data.role === 'technician') navigate('/dashboard/technician');
+        else if (data.role === 'vendor') navigate('/dashboard/vendor');
+        else navigate('/dashboard/customer');
+      }
       
     } catch (err) {
       setError(err.message);

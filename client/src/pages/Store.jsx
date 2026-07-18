@@ -116,7 +116,7 @@ const Store = () => {
       
       if (!token) {
          alert("Please login first to place an order");
-         navigate('/login');
+         navigate('/login?redirect=/store');
          return;
       }
 
