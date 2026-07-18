@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   Search, ShieldCheck, Clock, Navigation, CheckCircle, Star, 
   Smartphone, Droplets, Wrench, Wind, Bug, Sofa, ArrowRight, 
-  CreditCard, ChevronRight, Users, CalendarCheck, Hammer, Paintbrush, Plus, Minus, MapPin
+  CreditCard, ChevronRight, Users, CalendarCheck, Hammer, Paintbrush, Plus, Minus, MapPin, ShoppingBag
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
