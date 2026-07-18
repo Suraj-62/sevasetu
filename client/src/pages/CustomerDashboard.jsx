@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Home, Search, ShoppingBag, Calendar, Package, MapPin, Shield, CalendarDays, 
@@ -32,8 +32,34 @@ const bookingsData = [
 
 const CustomerDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
-  const { bookings, orders } = useStore();
   const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'Suraj' });
+  const [bookings, setBookings] = useState([]);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = userInfo?.token;
+      if (!token) return;
+
+      const [resBookings, resOrders] = await Promise.all([
+        fetch('/api/bookings', { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch('/api/orders', { headers: { 'Authorization': `Bearer ${token}` } })
+      ]);
+
+      if (resBookings.ok) {
+        setBookings(await resBookings.json());
+      }
+      if (resOrders.ok) {
+        setOrders(await resOrders.json());
+      }
+    } catch (error) {
+      console.error("Failed to fetch customer data", error);
+    }
+  };
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
@@ -319,6 +345,53 @@ const CustomerDashboard = () => {
                   </div>
                 ))}
              </div>
+             <div className="space-y-3 mt-4">
+             <h3 className="font-bold text-slate-700 text-sm mb-2">My Bookings</h3>
+             {bookings.length === 0 ? (
+               <p className="text-slate-500 text-sm text-center py-4">No active bookings.</p>
+             ) : (
+               bookings.slice(0, 3).map((b, i) => (
+                 <div key={b._id} className="bg-white p-3 rounded-2xl border border-slate-100 flex items-center justify-between shadow-sm">
+                   <div className="flex gap-3 items-center">
+                     <div className="w-10 h-10 rounded-xl bg-[#0F766E]/10 text-[#0F766E] flex items-center justify-center shrink-0">
+                       <PenTool size={16} />
+                     </div>
+                     <div>
+                       <h4 className="text-sm font-bold text-slate-800">{b.service}</h4>
+                       <p className="text-xs text-slate-500">{new Date(b.createdAt).toLocaleDateString()}</p>
+                     </div>
+                   </div>
+                   <div className="text-right">
+                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${b.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-orange-50 text-orange-600 border border-orange-100'}`}>{b.status.toUpperCase()}</span>
+                   </div>
+                 </div>
+               ))
+             )}
+           </div>
+
+           <div className="space-y-3 mt-8">
+             <h3 className="font-bold text-slate-700 text-sm mb-2">My Orders</h3>
+             {orders.length === 0 ? (
+               <p className="text-slate-500 text-sm text-center py-4">No recent orders.</p>
+             ) : (
+               orders.slice(0, 3).map((o, i) => (
+                 <div key={o._id} className="bg-white p-3 rounded-2xl border border-slate-100 flex items-center justify-between shadow-sm">
+                   <div className="flex gap-3 items-center">
+                     <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                       <Package size={16} />
+                     </div>
+                     <div>
+                       <h4 className="text-sm font-bold text-slate-800">{o.items[0]?.product}</h4>
+                       <p className="text-xs text-slate-500">Total: ₹{o.totalAmount}</p>
+                     </div>
+                   </div>
+                   <div className="text-right">
+                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${o.orderStatus === 'Pending' ? 'bg-orange-50 text-orange-600 border border-orange-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>{o.orderStatus.toUpperCase()}</span>
+                   </div>
+                 </div>
+               ))
+             )}
+           </div>
           </div>
           
         </div>

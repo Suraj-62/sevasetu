@@ -14,13 +14,54 @@ const BookingFlow = () => {
     time: "1 hr"
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     setIsProcessing(true);
-    // Mock Razorpay flow
-    setTimeout(() => {
+    
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const token = userInfo?.token;
+      
+      if (!token) {
+         alert("Please login first to book a service");
+         navigate('/login');
+         return;
+      }
+
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          service: mockService.name,
+          address: {
+            street: "123 Main St", // using static for demo, normally from step 1 state
+            city: "Ranchi",
+            state: "Jharkhand",
+            zipCode: "834001"
+          },
+          scheduledDate: new Date(),
+          timeSlot: "11:00 AM",
+          totalAmount: mockService.price + 49,
+          notes: "Please call before coming."
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to book service");
+      }
+
+      const data = await response.json();
+      console.log("Booking created:", data);
+      
       setIsProcessing(false);
       setStep(4); // Success step
-    }, 2000);
+    } catch (error) {
+      console.error(error);
+      alert("Error booking service");
+      setIsProcessing(false);
+    }
   };
 
   return (

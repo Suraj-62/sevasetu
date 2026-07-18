@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Home, Calendar, CalendarDays, AlertTriangle, Navigation, Users, DollarSign, 
@@ -24,6 +24,46 @@ const TechnicianDashboard = () => {
   const [isOnline, setIsOnline] = useState(true);
   const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'Technician' });
   const [isEmergencyOn, setIsEmergencyOn] = useState(true);
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const token = userInfo?.token;
+      if (!token) return;
+      const res = await fetch('/api/bookings/technician', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setJobs(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch jobs", error);
+    }
+  };
+
+  const updateJobStatus = async (id, status) => {
+    try {
+      const token = userInfo?.token;
+      const res = await fetch(`/api/bookings/${id}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        fetchJobs(); // refresh list
+      }
+    } catch (error) {
+      console.error("Failed to update status", error);
+    }
+  };
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
@@ -132,49 +172,44 @@ const TechnicianDashboard = () => {
             {/* Today's Schedule */}
             <div className="bg-white rounded-[2rem] p-6 shadow-[0_2px_15px_rgb(0,0,0,0.02)] border border-slate-100 flex flex-col h-full">
               <h3 className="font-bold text-slate-800 mb-6 text-sm">Today's Schedule</h3>
-              <div className="flex-1 relative">
+              <div className="flex-1 relative overflow-y-auto max-h-[300px]">
                 {/* Vertical Line */}
                 <div className="absolute left-[3.25rem] top-2 bottom-2 w-px bg-slate-200"></div>
                 
                 <div className="space-y-6">
-                  {/* Job 1 */}
-                  <div className="flex gap-4 relative">
-                    <div className="w-12 text-right pt-1 shrink-0"><span className="text-[9px] font-bold text-slate-500 block leading-tight">10:00<br/>AM</span></div>
-                    <div className="w-3 h-3 rounded-full bg-indigo-500 border-[3px] border-white shadow-sm relative z-10 mt-1.5 shrink-0"></div>
-                    <div className="flex-1 bg-white p-3 rounded-xl border border-slate-100 shadow-sm relative">
-                       <div className="absolute top-3 right-3 text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">In Progress</div>
-                       <h4 className="text-xs font-bold text-slate-800 mb-1">AC Repair & Service</h4>
-                       <p className="text-[10px] text-slate-500 flex items-center gap-1 mb-0.5"><User size={10}/> Amit Verma</p>
-                       <p className="text-[10px] text-slate-500 flex items-center gap-1"><MapPin size={10}/> Ranchi, Jharkhand</p>
-                       <button className="w-full mt-3 py-1.5 rounded-lg border border-indigo-200 text-indigo-600 font-bold text-[10px] hover:bg-indigo-50 transition-colors">Navigate</button>
-                    </div>
-                  </div>
-                  
-                  {/* Job 2 */}
-                  <div className="flex gap-4 relative">
-                    <div className="w-12 text-right pt-1 shrink-0"><span className="text-[9px] font-bold text-slate-500 block leading-tight">12:30<br/>PM</span></div>
-                    <div className="w-3 h-3 rounded-full bg-slate-300 border-[3px] border-white shadow-sm relative z-10 mt-1.5 shrink-0"></div>
-                    <div className="flex-1 bg-white p-3 rounded-xl border border-slate-100">
-                       <div className="absolute top-3 right-3 text-[9px] font-bold text-[#0F766E] bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100">Upcoming</div>
-                       <h4 className="text-xs font-bold text-slate-800 mb-1">Electrical Wiring</h4>
-                       <p className="text-[10px] text-slate-500 flex items-center gap-1 mb-0.5"><User size={10}/> Neha Singh</p>
-                       <p className="text-[10px] text-slate-500 flex items-center gap-1"><MapPin size={10}/> Ranchi, Jharkhand</p>
-                       <button className="w-full mt-3 py-1.5 rounded-lg border border-slate-200 text-indigo-600 font-bold text-[10px] hover:bg-slate-50 transition-colors">View Details</button>
-                    </div>
-                  </div>
-
-                  {/* Job 3 */}
-                  <div className="flex gap-4 relative">
-                    <div className="w-12 text-right pt-1 shrink-0"><span className="text-[9px] font-bold text-slate-500 block leading-tight">03:00<br/>PM</span></div>
-                    <div className="w-3 h-3 rounded-full bg-slate-300 border-[3px] border-white shadow-sm relative z-10 mt-1.5 shrink-0"></div>
-                    <div className="flex-1 bg-white p-3 rounded-xl border border-slate-100">
-                       <div className="absolute top-3 right-3 text-[9px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">Scheduled</div>
-                       <h4 className="text-xs font-bold text-slate-800 mb-1">Fan Installation</h4>
-                       <p className="text-[10px] text-slate-500 flex items-center gap-1 mb-0.5"><User size={10}/> Suresh Yadav</p>
-                       <p className="text-[10px] text-slate-500 flex items-center gap-1"><MapPin size={10}/> Ranchi, Jharkhand</p>
-                       <button className="w-full mt-3 py-1.5 rounded-lg border border-slate-200 text-indigo-600 font-bold text-[10px] hover:bg-slate-50 transition-colors">View Details</button>
-                    </div>
-                  </div>
+                  {jobs.length === 0 ? (
+                    <p className="text-center text-slate-500 text-sm py-4">No jobs assigned yet.</p>
+                  ) : (
+                    jobs.map((job, idx) => (
+                      <div key={job._id} className="flex gap-4 relative">
+                        <div className="w-12 text-right pt-1 shrink-0"><span className="text-[9px] font-bold text-slate-500 block leading-tight">{job.timeSlot.split('-')[0].trim()}</span></div>
+                        <div className={`w-3 h-3 rounded-full ${job.status === 'completed' ? 'bg-emerald-500' : job.status === 'in_progress' ? 'bg-indigo-500' : job.status === 'accepted' ? 'bg-teal-500' : 'bg-slate-300'} border-[3px] border-white shadow-sm relative z-10 mt-1.5 shrink-0`}></div>
+                        <div className="flex-1 bg-white p-3 rounded-xl border border-slate-100 shadow-sm relative">
+                           <div className={`absolute top-3 right-3 text-[9px] font-bold px-2 py-0.5 rounded-md border ${job.status === 'completed' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' : job.status === 'in_progress' ? 'text-indigo-600 bg-indigo-50 border-indigo-100' : job.status === 'accepted' ? 'text-teal-600 bg-teal-50 border-teal-100' : 'text-slate-600 bg-slate-100 border-slate-200'}`}>
+                             {job.status.toUpperCase()}
+                           </div>
+                           <h4 className="text-xs font-bold text-slate-800 mb-1">{job.service}</h4>
+                           <p className="text-[10px] text-slate-500 flex items-center gap-1 mb-0.5"><User size={10}/> {job.customer?.name || 'Customer'}</p>
+                           <p className="text-[10px] text-slate-500 flex items-center gap-1"><MapPin size={10}/> {job.address?.street}, {job.address?.city}</p>
+                           
+                           <div className="flex gap-2 mt-3">
+                             {job.status === 'pending' && (
+                               <button onClick={() => updateJobStatus(job._id, 'accepted')} className="flex-1 py-1.5 rounded-lg border border-teal-200 text-teal-600 bg-teal-50 font-bold text-[10px] hover:bg-teal-100 transition-colors">Accept</button>
+                             )}
+                             {job.status === 'accepted' && (
+                               <button onClick={() => updateJobStatus(job._id, 'in_progress')} className="flex-1 py-1.5 rounded-lg border border-indigo-200 text-indigo-600 bg-indigo-50 font-bold text-[10px] hover:bg-indigo-100 transition-colors">Start Job</button>
+                             )}
+                             {job.status === 'in_progress' && (
+                               <button onClick={() => updateJobStatus(job._id, 'completed')} className="flex-1 py-1.5 rounded-lg border border-emerald-200 text-emerald-600 bg-emerald-50 font-bold text-[10px] hover:bg-emerald-100 transition-colors">Mark Completed</button>
+                             )}
+                             {job.status !== 'completed' && job.status !== 'cancelled' && (
+                               <button onClick={() => updateJobStatus(job._id, 'cancelled')} className="flex-1 py-1.5 rounded-lg border border-red-200 text-red-600 font-bold text-[10px] hover:bg-red-50 transition-colors">Cancel</button>
+                             )}
+                           </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
               <button className="w-full mt-4 text-[11px] font-bold text-indigo-600 py-2 hover:bg-indigo-50 rounded-xl transition-colors">View Full Schedule</button>

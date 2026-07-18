@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Home, Package, ShoppingCart, Archive, Wrench, Shield, CalendarDays, 
@@ -23,6 +23,46 @@ const revenueData = [
 const VendorDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
   const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'LG Electronics' });
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const token = userInfo?.token;
+      if (!token) return;
+      const res = await fetch('/api/orders/vendor', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setOrders(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch orders", error);
+    }
+  };
+
+  const updateOrderStatus = async (id, status) => {
+    try {
+      const token = userInfo?.token;
+      const res = await fetch(`/api/orders/${id}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        fetchOrders();
+      }
+    } catch (error) {
+      console.error("Failed to update order status", error);
+    }
+  };
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
@@ -173,19 +213,29 @@ const VendorDashboard = () => {
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <tbody className="divide-y divide-slate-100">
-                    {recentOrders.map((order, i) => (
-                      <tr key={i} className="hover:bg-slate-50 transition-colors group">
-                        <td className="py-3 px-2 text-[10px] font-bold text-slate-500">{order.id}</td>
-                        <td className="py-3 px-2 text-[11px] font-bold text-slate-800">{order.name}</td>
-                        <td className="py-3 px-2 text-[11px] font-black text-slate-800">{order.amount}</td>
-                        <td className="py-3 px-2">
-                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded border ${order.color}`}>{order.status}</span>
-                        </td>
-                        <td className="py-3 px-2 text-[9px] text-slate-400 whitespace-nowrap">{order.time}</td>
-                      </tr>
-                    ))}
-                  </tbody>
+                    {orders.length === 0 ? (
+                      <tr><td colSpan="5" className="py-4 text-center text-slate-500 text-sm">No orders found.</td></tr>
+                    ) : (
+                      orders.slice(0, 5).map((order, i) => (
+                        <tr key={order._id} className="hover:bg-slate-50 transition-colors group">
+                          <td className="py-3 px-2 text-[10px] font-bold text-slate-500">#{order._id.substring(18)}</td>
+                          <td className="py-3 px-2 text-[11px] font-bold text-slate-800">{order.customer?.name || 'Customer'}</td>
+                          <td className="py-3 px-2 text-[11px] font-black text-slate-800">₹{order.totalAmount}</td>
+                          <td className="py-3 px-2 flex gap-1">
+                             <span className={`text-[9px] font-bold px-2 py-0.5 rounded border ${order.orderStatus === 'Pending' ? 'text-orange-500 bg-orange-50 border-orange-100' : order.orderStatus === 'Shipped' ? 'text-blue-500 bg-blue-50 border-blue-100' : 'text-emerald-500 bg-emerald-50 border-emerald-100'}`}>
+                               {order.orderStatus}
+                             </span>
+                             {order.orderStatus === 'Pending' && (
+                               <button onClick={() => updateOrderStatus(order._id, 'Shipped')} className="text-[9px] font-bold px-2 py-0.5 rounded border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100">Ship</button>
+                             )}
+                             {order.orderStatus === 'Shipped' && (
+                               <button onClick={() => updateOrderStatus(order._id, 'Delivered')} className="text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-200 text-emerald-600 bg-emerald-50 hover:bg-emerald-100">Deliver</button>
+                             )}
+                          </td>
+                          <td className="py-3 px-2 text-[9px] text-slate-400 whitespace-nowrap">{new Date(order.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                      ))
+                    )}
                 </table>
               </div>
             </div>

@@ -92,6 +92,8 @@ const Store = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState([]);
   const [toastMessage, setToastMessage] = useState('');
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
 
   const filteredProducts = PRODUCTS.filter(p => {
@@ -104,6 +106,60 @@ const Store = () => {
     setCart([...cart, product]);
     setToastMessage(`Added ${product.name} to cart`);
     setTimeout(() => setToastMessage(''), 3000);
+  };
+
+  const handleCheckout = async () => {
+    setIsProcessing(true);
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const token = userInfo?.token;
+      
+      if (!token) {
+         alert("Please login first to place an order");
+         navigate('/login');
+         return;
+      }
+
+      // Group cart by vendor? For simplicity, we just use the first item's vendor for the whole order in this demo
+      const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+      
+      const orderItems = cart.map(item => ({
+        product: item.name,
+        quantity: 1,
+        priceAtPurchase: item.price
+      }));
+
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          vendor: cart[0].vendor,
+          items: orderItems,
+          shippingAddress: {
+            street: "456 Shopping Avenue",
+            city: "Ranchi",
+            state: "Jharkhand",
+            zipCode: "834002"
+          },
+          totalAmount: totalAmount + 99 // adding taxes/shipping
+        })
+      });
+
+      if (!response.ok) throw new Error("Failed to place order");
+
+      setCart([]);
+      setShowCheckout(false);
+      setToastMessage('Order placed successfully! Check Dashboard.');
+      setTimeout(() => setToastMessage(''), 3000);
+    } catch (error) {
+      console.error(error);
+      alert("Error placing order");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -141,7 +197,7 @@ const Store = () => {
             />
           </div>
 
-          <div className="relative cursor-pointer">
+          <div className="relative cursor-pointer" onClick={() => cart.length > 0 && setShowCheckout(true)}>
             <div className="w-12 h-12 rounded-full bg-[#0F766E]/10 flex items-center justify-center text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-colors">
               <ShoppingCart size={24} />
             </div>
@@ -153,6 +209,45 @@ const Store = () => {
           </div>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      {showCheckout && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative">
+            <h2 className="text-2xl font-black text-[#0F172A] mb-6">Checkout Summary</h2>
+            <div className="space-y-4 max-h-60 overflow-y-auto mb-6">
+              {cart.map((item, idx) => (
+                <div key={idx} className="flex justify-between items-center border-b border-slate-100 pb-4">
+                  <div>
+                    <h4 className="font-bold text-sm text-slate-800 line-clamp-1">{item.name}</h4>
+                    <p className="text-xs text-slate-500">Qty: 1</p>
+                  </div>
+                  <span className="font-black text-[#0F766E]">₹{item.price.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-slate-500">Subtotal</span>
+              <span className="font-bold text-slate-800">₹{cart.reduce((s, i) => s + i.price, 0).toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between items-center mb-6">
+              <span className="text-slate-500">Shipping & Tax</span>
+              <span className="font-bold text-slate-800">₹99</span>
+            </div>
+            <div className="flex justify-between items-center mb-8 border-t border-slate-200 pt-4">
+              <span className="text-lg font-black text-slate-800">Total to Pay</span>
+              <span className="text-xl font-black text-[#0F766E]">₹{(cart.reduce((s, i) => s + i.price, 0) + 99).toLocaleString()}</span>
+            </div>
+            
+            <div className="flex gap-4">
+              <button onClick={() => setShowCheckout(false)} className="flex-1 py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-colors">Cancel</button>
+              <button onClick={handleCheckout} disabled={isProcessing} className="flex-1 py-3 px-4 rounded-xl bg-[#0F766E] text-white font-bold hover:bg-[#115E59] transition-colors disabled:opacity-50">
+                {isProcessing ? 'Processing...' : 'Place Order'}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         
