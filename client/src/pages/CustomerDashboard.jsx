@@ -334,7 +334,21 @@ const CustomerDashboard = () => {
       activeTab={activeTab} 
       setActiveTab={setActiveTab}
     >
-      {renderOverview()}
+      {activeTab === 'Overview' || activeTab === 'Dashboard' ? renderOverview() : (
+        <div className="flex flex-col items-center justify-center h-[60vh] text-center w-full max-w-2xl mx-auto">
+          <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6 shadow-inner border-4 border-white shadow-xl">
+            <Settings size={40} className="text-[#0F766E]" />
+          </div>
+          <h3 className="text-3xl font-black text-slate-900 mb-4">{activeTab} Settings</h3>
+          <div className="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 w-full mb-8">
+             <p className="text-slate-600 font-semibold mb-2 text-lg">Your {activeTab.toLowerCase()} configuration</p>
+             <p className="text-slate-400 font-medium">This module is currently being developed and will be fully available in the next release.</p>
+          </div>
+          <button onClick={() => setActiveTab('Overview')} className="px-8 py-4 bg-[#0F766E] hover:bg-[#115E59] text-white font-black rounded-2xl shadow-xl transition-all flex items-center gap-3">
+            Back to Dashboard <ArrowRight size={20} />
+          </button>
+        </div>
+      )}
     </DashboardLayout>
   );
 };

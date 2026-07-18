@@ -27,6 +27,10 @@ const Login = () => {
       const data = await response.json();
       
       if (!response.ok) {
+        if (data.message === 'Account pending admin approval') {
+          navigate('/verification-pending');
+          return;
+        }
         throw new Error(data.message || 'Invalid email or password');
       }
       

@@ -317,6 +317,47 @@ const VendorDashboard = () => {
         </motion.div>
       );
     }
+    if (activeTab === 'Settings') {
+      return (
+        <div className="bg-white rounded-[2rem] p-8 shadow-[0_2px_15px_rgb(0,0,0,0.02)] border border-slate-100 max-w-3xl mx-auto mt-8">
+           <div className="flex items-center gap-4 mb-8">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
+                 <Settings size={28} className="text-slate-600" />
+              </div>
+              <div>
+                 <h2 className="text-2xl font-black text-slate-800">Shop Settings</h2>
+                 <p className="text-slate-500 font-medium">Update your business profile and preferences.</p>
+              </div>
+           </div>
+           
+           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert("Shop settings saved successfully!"); }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Shop Name</label>
+                    <input type="text" defaultValue={userInfo.name} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                 </div>
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Business Email</label>
+                    <input type="email" defaultValue={userInfo.email || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                 </div>
+                 <div className="md:col-span-2">
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Store Address</label>
+                    <textarea rows="3" defaultValue="123 Main Market, Ranchi, Jharkhand" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium resize-none"></textarea>
+                 </div>
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">GSTIN / Tax ID</label>
+                    <input type="text" defaultValue="20ABCDE1234F1Z5" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                 </div>
+              </div>
+              <div className="pt-4 flex justify-end">
+                 <button type="submit" className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+                    Save Changes
+                 </button>
+              </div>
+           </form>
+        </div>
+      );
+    }
 
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-center">
