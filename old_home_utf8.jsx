@@ -1,48 +1,14 @@
-import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ShieldCheck, Clock, CheckCircle, Star, Droplets, Wrench, Wind, Bug, Paintbrush, Zap, MapPin, Users, MoreHorizontal, ChevronDown, CheckSquare, Tag, Banknote, Navigation, Smartphone, Sofa, ArrowRight, CreditCard, ChevronRight, CalendarCheck, Hammer, Plus, Minus, ShoppingBag, Sparkles } from 'lucide-react';
+import { 
+  Search, ShieldCheck, Clock, Navigation, CheckCircle, Star, 
+  Smartphone, Droplets, Wrench, Wind, Bug, Sofa, ArrowRight, 
+  CreditCard, ChevronRight, Users, CalendarCheck, Hammer, Paintbrush, Plus, Minus, MapPin, ShoppingBag
+} from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 // --- Data Objects ---
-const QUICK_CATEGORIES = [
-  { icon: Wind, name: 'AC Repair', color: 'text-[#0F766E]' },
-  { icon: Droplets, name: 'Cleaning', color: 'text-[#0F766E]' },
-  { icon: Wrench, name: 'Plumbing', color: 'text-[#0F766E]' },
-  { icon: Zap, name: 'Electrician', color: 'text-[#0F766E]' },
-  { icon: Paintbrush, name: 'Painting', color: 'text-[#0F766E]' },
-  { icon: CheckSquare, name: 'Appliance Repair', color: 'text-[#0F766E]' },
-  { icon: Bug, name: 'Pest Control', color: 'text-[#0F766E]' },
-  { icon: MoreHorizontal, name: 'More', color: 'text-[#0F766E]' },
-];
-
-const POPULAR_SERVICES = [
-  { 
-    name: 'AC Repair', 
-    rating: '4.7 (1.2k)', 
-    price: '₹499', 
-    img: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=400' 
-  },
-  { 
-    name: 'Deep Cleaning', 
-    rating: '4.6 (980)', 
-    price: '₹799', 
-    img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=400' 
-  },
-  { 
-    name: 'Plumbing', 
-    rating: '4.7 (1.1k)', 
-    price: '₹399', 
-    img: 'https://images.unsplash.com/photo-1607472586893-edb57cbce4ea?auto=format&fit=crop&q=80&w=400' 
-  },
-  { 
-    name: 'Electrician', 
-    rating: '4.8 (1.3k)', 
-    price: '₹299', 
-    img: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400' 
-  }
-];
-
 
 const popularSearches = ['AC Repair', 'Cleaning', 'Electrician', 'RO Service', 'Painting'];
 
@@ -58,7 +24,7 @@ const categories = [
 ];
 // Need to add Sparkles and Zap to lucide-react imports! Wait, I will just use existing icons if they aren't imported or add them to import.
 // Let's redefine with exact imported icons.
-
+import { Zap, Sparkles } from 'lucide-react';
 
 const usps = [
   { icon: ShieldCheck, title: 'Verified Professionals', desc: 'Every technician is background checked.' },
@@ -98,12 +64,12 @@ const faqs = [
   { q: "Do you offer warranty on repairs?", a: "Yes, all our repair services come with a standard 30-day warranty on parts and labor." },
 ];
 
+// --- Main Component ---
 
 const Home = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [openFaq, setOpenFaq] = useState(0);
-
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -111,195 +77,85 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-[#0F766E] selection:text-white pb-24">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-blue-500 selection:text-white">
       <Navbar />
 
-      <main className="pt-32 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+      <main className="pt-28 pb-10">
         
-        {/* HERO SECTION */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center mb-16">
-          
-          {/* Left Column: Text & Search */}
-          <div className="pr-0 lg:pr-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 text-[#0F766E] font-semibold text-sm mb-6">
-              <span className="w-2 h-2 rounded-full bg-[#0F766E] animate-pulse"></span> SevaSetu 2.0 is Live
-            </div>
-            
-            <h1 className="text-5xl lg:text-6xl font-black text-[#0F172A] leading-[1.15] tracking-tight mb-6">
-              Quality Home Services, <br />
-              <span className="text-[#0F766E]">You Can Trust.</span>
-            </h1>
-            
-            <p className="text-lg text-[#475569] mb-10 max-w-lg">
-              Book verified professionals for your home needs or shop genuine products – all in one place.
-            </p>
-            
-            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row items-center bg-white p-2 rounded-2xl shadow-lg border border-[#E2E8F0] mb-10">
-              <div className="flex-1 flex items-center px-4 w-full border-b sm:border-b-0 sm:border-r border-[#E2E8F0] py-2 sm:py-0">
-                <Search className="text-slate-400 mr-3" size={20} />
-                <input 
-                  type="text" 
-                  placeholder="Search for services (e.g. AC Repair, Cleaning)"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full focus:outline-none text-[#0F172A] placeholder-slate-400 bg-transparent"
-                />
+        {/* 1. Hero Section */}
+        <section className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-20 pt-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-bold text-sm mb-6 border border-blue-100">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span> SevaSetu 2.0 is Live
               </div>
-              <div className="flex items-center gap-4 px-4 py-3 sm:py-0 w-full sm:w-auto justify-between">
-                <div className="flex items-center gap-2 cursor-pointer text-[#0F172A] font-medium">
-                  <MapPin size={18} className="text-[#0F766E]" />
-                  <span>New Delhi</span>
-                  <ChevronDown size={16} className="text-slate-400" />
-                </div>
-                <button type="submit" className="bg-[#0F766E] hover:bg-[#115E59] text-white px-6 py-3 rounded-xl font-bold transition-colors">
-                  Search
-                </button>
-              </div>
-            </form>
-
-            <div className="flex flex-wrap items-center gap-6 lg:gap-10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-[#0F766E]">
-                  <Users size={20} />
-                </div>
-                <div>
-                  <p className="font-bold text-[#0F172A] text-lg leading-tight">10K+</p>
-                  <p className="text-sm text-[#64748B]">Happy Customers</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-[#0F766E]">
-                  <Star size={20} className="fill-[#0F766E]" />
-                </div>
-                <div>
-                  <p className="font-bold text-[#0F172A] text-lg leading-tight">4.8</p>
-                  <p className="text-sm text-[#64748B]">Average Rating</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-[#0F766E]">
-                  <ShieldCheck size={20} />
-                </div>
-                <div>
-                  <p className="font-bold text-[#0F172A] text-lg leading-tight">Certified</p>
-                  <p className="text-sm text-[#64748B]">Professionals</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Grid of Categories */}
-          <div className="bg-white p-8 rounded-3xl shadow-xl border border-[#E2E8F0]">
-            <h3 className="text-xl font-bold text-[#0F172A] mb-6">What do you need today?</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {QUICK_CATEGORIES.map((cat, i) => (
-                <Link 
-                  to="/services" 
-                  key={i}
-                  className="flex flex-col items-center justify-center p-4 rounded-2xl border border-[#E2E8F0] hover:border-[#0F766E] hover:shadow-md transition-all duration-300 group bg-[#F8FAFC] hover:bg-white"
-                >
-                  <cat.icon size={32} strokeWidth={1.5} className={`${cat.color} mb-3 group-hover:scale-110 transition-transform`} />
-                  <span className="text-xs font-semibold text-[#0F172A] text-center">{cat.name}</span>
+              <h1 className="text-5xl lg:text-7xl font-black text-[#0F172A] leading-[1.1] tracking-tight mb-6">
+                Trusted Home Services,<br/>
+                <span className="text-[#0F766E]">Delivered at Your Doorstep.</span>
+              </h1>
+              <p className="text-xl text-[#64748B] font-medium mb-10 max-w-lg leading-relaxed">
+                Book verified professionals, buy home products, track technicians live, and manage warranties, all in one place.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link to="/services" className="bg-[#0F766E] hover:bg-[#115E59] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2">
+                  Book Service <ArrowRight size={20} />
                 </Link>
-              ))}
-            </div>
-          </div>
-
-        </div>
-
-        {/* FEATURES BANNER */}
-        <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-6 mb-16 flex flex-col md:flex-row justify-between items-center gap-6 divide-y md:divide-y-0 md:divide-x divide-[#E2E8F0]">
-          <div className="flex items-center gap-4 px-4 w-full md:w-auto justify-center md:justify-start">
-            <ShieldCheck size={28} className="text-[#0F766E]" />
-            <div>
-              <p className="font-bold text-[#0F172A]">Verified Professionals</p>
-              <p className="text-sm text-[#64748B]">Background checked</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 px-4 w-full md:w-auto justify-center md:justify-start pt-6 md:pt-0">
-            <Banknote size={28} className="text-[#0F766E]" />
-            <div>
-              <p className="font-bold text-[#0F172A]">Upfront Pricing</p>
-              <p className="text-sm text-[#64748B]">No hidden charges</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 px-4 w-full md:w-auto justify-center md:justify-start pt-6 md:pt-0">
-            <Clock size={28} className="text-[#0F766E]" />
-            <div>
-              <p className="font-bold text-[#0F172A]">On-time Service</p>
-              <p className="text-sm text-[#64748B]">Punctual & reliable</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 px-4 w-full md:w-auto justify-center md:justify-start pt-6 md:pt-0">
-            <CheckCircle size={28} className="text-[#0F766E]" />
-            <div>
-              <p className="font-bold text-[#0F172A]">Warranty Assurance</p>
-              <p className="text-sm text-[#64748B]">Peace of mind</p>
-            </div>
-          </div>
-        </div>
-
-        {/* BOTTOM SECTION: Popular Services & Store Banner */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          
-          {/* Popular Services */}
-          <div className="xl:col-span-2">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#0F172A]">Popular Services</h2>
-              <Link to="/services" className="px-4 py-2 rounded-full border border-[#E2E8F0] text-sm font-semibold hover:bg-slate-50 transition-colors">
-                View all
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {POPULAR_SERVICES.map((service, i) => (
-                <Link to="/services" key={i} className="bg-white rounded-2xl overflow-hidden border border-[#E2E8F0] hover:shadow-lg transition-shadow group block">
-                  <div className="h-36 overflow-hidden">
-                    <img 
-                      src={service.img} 
-                      alt={service.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-[#0F172A] mb-1">{service.name}</h3>
-                    <div className="flex items-center gap-1 text-xs font-semibold text-amber-500 mb-3">
-                      <Star size={12} className="fill-amber-500" /> {service.rating}
-                    </div>
-                    <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-3 mt-auto">
-                      <span className="text-xs font-medium text-[#64748B]">From <strong className="text-[#0F172A] text-sm">{service.price}</strong></span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Shop Quality Products Banner */}
-          <div className="xl:col-span-1">
-            <div className="bg-[#0F766E] rounded-3xl p-8 h-full flex flex-col justify-between relative overflow-hidden text-white shadow-xl">
-              <div className="relative z-10">
-                <h3 className="text-3xl font-black mb-3">Shop Quality Products</h3>
-                <p className="text-teal-50 mb-8 max-w-[200px]">
-                  Appliances, spare parts & more from trusted sellers.
-                </p>
-                <Link to="/store" className="inline-block bg-white text-[#0F172A] px-6 py-3 rounded-xl font-bold hover:bg-slate-100 transition-colors">
+                <Link to="/store" className="bg-white hover:bg-slate-50 text-[#0F172A] border-2 border-slate-200 px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center gap-2 hover:-translate-y-1">
                   Explore Marketplace
                 </Link>
               </div>
-              <div className="absolute -right-8 -bottom-10 w-64 h-64 z-0">
-                <img 
-                  src="https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?q=80&w=400&auto=format&fit=crop" 
-                  alt="Washing Machine" 
-                  className="w-full h-full object-contain drop-shadow-2xl brightness-110 mix-blend-screen"
-                />
+            </motion.div>
+            
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="relative h-[500px] lg:h-[600px] rounded-[2.5rem] overflow-hidden shadow-2xl">
+              <div className="grid grid-cols-2 gap-4 h-full p-4">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600" alt="Home Cleaning" className="w-full h-full object-cover rounded-3xl shadow-lg" />
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600" alt="Electrician" className="w-full h-full object-cover rounded-3xl shadow-lg mt-8" />
+                <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=600" alt="Plumbing" className="w-full h-full object-cover rounded-3xl shadow-lg -mt-8" />
+                <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=600" alt="AC Repair" className="w-full h-full object-cover rounded-3xl shadow-lg" />
               </div>
-            </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-transparent to-transparent"></div>
+              
+              {/* Floating Elements on Image */}
+              <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl flex items-center gap-4">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600"><CheckCircle size={24} /></div>
+                <div>
+                  <p className="text-sm font-bold text-[#0F172A]">AC Repaired</p>
+                  <p className="text-xs font-semibold text-[#64748B]">Just now</p>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
+        </section>
 
-        </div>
+        {/* 2. Search Section */}
+        <section className="max-w-4xl mx-auto px-6 mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-[2rem] p-8 shadow-xl border border-slate-100 text-center">
+            <h2 className="text-2xl font-black text-[#0F172A] mb-6 flex items-center justify-center gap-3">
+              <Search className="text-[#0F766E]" size={28} /> What service do you need today?
+            </h2>
+            <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto mb-6">
+              <input 
+                type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for AC Repair, Cleaning, Plumber..." 
+                className="w-full pl-6 pr-32 py-5 bg-[#F8FAFC] border-2 border-slate-100 rounded-2xl text-lg font-semibold focus:outline-none focus:border-[#0F766E] transition-colors"
+              />
+              <button type="submit" className="absolute right-2 top-2 bottom-2 bg-[#0F766E] text-white px-8 rounded-xl font-bold hover:bg-[#115E59] transition-colors">
+                Search
+              </button>
+            </form>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm font-bold">
+              <span className="text-[#64748B]">Popular:</span>
+              {popularSearches.map(term => (
+                <button key={term} onClick={() => setSearchQuery(term)} className="px-4 py-1.5 bg-slate-50 border border-slate-200 text-[#0F172A] rounded-full hover:bg-slate-100 transition-colors">
+                  {term}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        </section>
 
-      
         {/* 3. Categories Grid */}
         <section className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-24">
           <h2 className="text-3xl font-black text-[#0F172A] mb-10 text-center">Explore Categories</h2>
@@ -525,7 +381,6 @@ const Home = () => {
           </div>
         </section>
 
-      
       </main>
     </div>
   );
