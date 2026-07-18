@@ -7,7 +7,6 @@ import {
   CreditCard, ChevronRight, Users, CalendarCheck, Hammer, Paintbrush, Plus, Minus, MapPin, ShoppingBag
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 // --- Data Objects ---
 
@@ -108,7 +107,12 @@ const Home = () => {
             </motion.div>
             
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="relative h-[500px] lg:h-[600px] rounded-[2.5rem] overflow-hidden shadow-2xl">
-              <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200" alt="Home Services" className="w-full h-full object-cover" />
+              <div className="grid grid-cols-2 gap-4 h-full p-4">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600" alt="Home Cleaning" className="w-full h-full object-cover rounded-3xl shadow-lg" />
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600" alt="Electrician" className="w-full h-full object-cover rounded-3xl shadow-lg mt-8" />
+                <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=600" alt="Plumbing" className="w-full h-full object-cover rounded-3xl shadow-lg -mt-8" />
+                <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=600" alt="AC Repair" className="w-full h-full object-cover rounded-3xl shadow-lg" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-transparent to-transparent"></div>
               
               {/* Floating Elements on Image */}
@@ -378,8 +382,6 @@ const Home = () => {
         </section>
 
       </main>
-
-      <Footer />
     </div>
   );
 };
