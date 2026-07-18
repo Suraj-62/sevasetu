@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @import "tailwindcss";
 
 @theme {
@@ -9,7 +9,7 @@
   --color-danger: #EF4444;
   --color-background: #F8FAFC;
   --color-card: #FFFFFF;
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Geist", sans-serif;
 }
 
 body {

@@ -23,8 +23,9 @@ const AppContent = () => {
   const isDashboard = location.pathname.includes('dashboard');
   const isStoreApp = location.pathname === '/store' || location.pathname.startsWith('/shop/');
   const isAuth = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/verification-pending';
+  const isServices = location.pathname.startsWith('/services');
   const hideNav = isDashboard || isStoreApp || isAuth;
-  const hideFooter = isDashboard || isStoreApp || isAuth;
+  const hideFooter = isDashboard || isStoreApp || isAuth || isServices;
 
   return (
     <div className="flex flex-col min-h-screen">
