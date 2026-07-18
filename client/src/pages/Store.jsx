@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ShoppingCart, Star, Check, Sparkles, Plus, ChevronLeft, Store as StoreIcon, ShieldCheck, Tag } from 'lucide-react';
+import { Search, ShoppingCart, Star, Check, Sparkles, Plus, ChevronLeft, ChevronRight, Store as StoreIcon, ShieldCheck, Tag } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const CATEGORIES = ['All', 'Air Conditioners', 'RO Purifiers', 'Televisions', 'Electrical Parts', 'Plumbing', 'Smart Home'];
