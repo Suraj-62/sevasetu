@@ -3,9 +3,12 @@
 
 @theme {
   --color-primary: #2563EB;
-  --color-secondary: #10B981;
-  --color-accent: #F97316;
+  --color-primary-hover: #1D4ED8;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
   --color-background: #F8FAFC;
+  --color-card: #FFFFFF;
   --font-sans: "Inter", sans-serif;
 }
 
@@ -22,4 +25,26 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   border-radius: 1rem;
+}
+
+.dashboard-card {
+  background-color: var(--color-card);
+  border-radius: 18px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.nav-item-active {
+  background-color: #EFF6FF;
+  color: #2563EB;
+}
+
+.nav-item-active svg {
+  color: #2563EB;
 }

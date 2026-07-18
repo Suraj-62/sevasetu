@@ -4,11 +4,31 @@ import {
   Home, Search, ShoppingBag, Calendar, Package, MapPin, Shield, CalendarDays, 
   CreditCard, Settings, AlertTriangle, Wrench, ChevronRight, MoreHorizontal, 
   Heart, Wallet, Tag, MessageSquare, Bell, Star, User, Activity, Zap, Truck, CheckCircle,
-  Gift, Plus, Droplet, Bug, Paintbrush, Hammer, Sparkles, Grid
+  Gift, Plus, Droplet, Bug, Paintbrush, Hammer, Sparkles, Grid, Clock, Check, ArrowRight, ArrowUpRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useStore from '../store/useStore';
 import DashboardLayout from '../components/DashboardLayout';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const spendingData = [
+  { name: 'Jan', spend: 4000 },
+  { name: 'Feb', spend: 3000 },
+  { name: 'Mar', spend: 2000 },
+  { name: 'Apr', spend: 2780 },
+  { name: 'May', spend: 1890 },
+  { name: 'Jun', spend: 2390 },
+];
+
+const bookingsData = [
+  { name: 'Mon', count: 2 },
+  { name: 'Tue', count: 1 },
+  { name: 'Wed', count: 4 },
+  { name: 'Thu', count: 2 },
+  { name: 'Fri', count: 5 },
+  { name: 'Sat', count: 8 },
+  { name: 'Sun', count: 7 },
+];
 
 const CustomerDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
@@ -17,273 +37,294 @@ const CustomerDashboard = () => {
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
-    { name: 'Browse Services', icon: Search, link: '/services' },
+    { name: 'Services', icon: Search, link: '/services' },
     { name: 'Marketplace', icon: ShoppingBag, link: '/store' },
-    { name: 'My Bookings', icon: Calendar, onClick: () => setActiveTab('My Bookings') },
-    { name: 'My Orders', icon: Package, onClick: () => setActiveTab('My Orders') },
-    { name: 'Live Tracking', icon: MapPin, onClick: () => setActiveTab('Live Tracking') },
-    { name: 'My Home', icon: Home, onClick: () => setActiveTab('My Home') },
-    { name: 'My Warranty', icon: Shield, onClick: () => setActiveTab('My Warranty') },
-    { name: 'AMC Plans', icon: CalendarDays, onClick: () => setActiveTab('AMC Plans') },
-    { name: 'Wishlist', icon: Heart, onClick: () => setActiveTab('Wishlist') },
-    { name: 'Payments', icon: CreditCard, onClick: () => setActiveTab('Payments') },
-    { name: 'Wallet', icon: Wallet, onClick: () => setActiveTab('Wallet') },
-    { name: 'Coupons & Offers', icon: Tag, onClick: () => setActiveTab('Coupons & Offers') },
+    { name: 'Bookings', icon: Calendar, onClick: () => setActiveTab('My Bookings') },
+    { name: 'Orders', icon: Package, onClick: () => setActiveTab('My Orders') },
+    { name: 'Warranty', icon: Shield, onClick: () => setActiveTab('My Warranty') },
     { name: 'Messages', icon: MessageSquare, onClick: () => setActiveTab('Messages') },
-    { name: 'Notifications', icon: Bell, onClick: () => setActiveTab('Notifications') },
-    { name: 'Reviews', icon: Star, onClick: () => setActiveTab('Reviews') },
-    { name: 'Profile', icon: User, onClick: () => setActiveTab('Profile') },
     { name: 'Settings', icon: Settings, onClick: () => setActiveTab('Settings') },
   ];
 
-  const renderContent = () => {
-    if (activeTab === 'Overview' || activeTab === 'Dashboard') {
-      return (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            {/* Left Column (2/3 width) */}
-            <div className="lg:col-span-2 space-y-6">
-              
-              {/* Hero Section */}
-              <div className="bg-[#eef2fa] rounded-[2rem] p-8 md:p-10 relative overflow-hidden flex flex-col justify-center min-h-[240px]">
-                <div 
-                  className="absolute right-0 bottom-0 top-0 w-3/5 pointer-events-none"
-                  style={{ 
-                    WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 25%)',
-                    maskImage: 'linear-gradient(to right, transparent 0%, black 25%)'
-                  }}
-                >
-                   <img src="/living_room_hero.png" alt="Living Room" className="object-cover h-full w-full object-center opacity-95" />
-                </div>
-                
-                <div className="relative z-10 w-full md:w-3/5 pr-4">
-                  <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-2 leading-tight">Hey,<br/>{userInfo.name} <span className="inline-block animate-bounce origin-bottom-right">👋</span></h1>
-                  <p className="text-slate-600 font-medium mb-2">What would you like to book today?</p>
-                </div>
-              </div>
+  const renderOverview = () => (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 max-w-6xl mx-auto">
+      
+      {/* 1. Hero Section */}
+      <div className="rounded-3xl p-8 relative overflow-hidden flex flex-col justify-center min-h-[200px]" style={{ background: 'linear-gradient(135deg, #EFF6FF, #DBEAFE, #F0FDFA)' }}>
+        <div className="absolute right-0 bottom-0 top-0 w-1/2 pointer-events-none opacity-90 hidden md:block" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 25%)' }}>
+           <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000" alt="Beautiful Home" className="object-cover h-full w-full object-center mix-blend-multiply" />
+        </div>
+        
+        <div className="relative z-10 w-full md:w-3/5 pr-4">
+          <h1 className="text-3xl font-black text-slate-800 mb-2 leading-tight tracking-tight">Good Morning {userInfo.name.split(' ')[0]} <span className="inline-block animate-bounce origin-bottom-right">👋</span></h1>
+          <p className="text-slate-600 font-semibold mb-6">Book trusted home services instantly.</p>
+          
+          <div className="flex flex-wrap gap-3">
+             <div className="relative flex-1 min-w-[200px] max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <input type="text" placeholder="Search services..." className="w-full pl-10 pr-4 py-2.5 bg-white rounded-xl text-sm font-semibold border-none focus:ring-2 focus:ring-blue-500 shadow-sm outline-none" />
+             </div>
+             <button className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-sm transition-colors">Book Service</button>
+             <button className="bg-white text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-50 shadow-sm transition-colors border border-slate-200">Buy Product</button>
+             <button className="bg-red-50 text-red-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors hidden sm:block">Emergency</button>
+          </div>
+        </div>
+      </div>
 
-              {/* Search Box */}
-              <div className="relative w-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100/80 rounded-2xl bg-white p-1.5 flex items-center z-20 transform -translate-y-2">
-                <div className="pl-5 pr-2 text-indigo-400 shrink-0">
-                  <Search size={22} strokeWidth={2.5} />
-                </div>
-                <input 
-                  type="text" 
-                  placeholder="Search for services like AC Repair, Plumbing, Cleaning..." 
-                  className="flex-1 py-3.5 px-3 border-0 border-transparent focus:border-transparent focus:ring-0 outline-none focus:outline-none shadow-none bg-transparent text-sm font-bold text-slate-800 placeholder:text-slate-400 w-full" 
-                  style={{ boxShadow: 'none' }}
-                />
-                <button className="bg-indigo-600 text-white px-10 py-3.5 rounded-xl font-bold text-sm hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-600/30 transition-all ml-2 shrink-0">Search</button>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-                {[
-                  { icon: Wrench, color: 'text-indigo-500', bg: 'bg-indigo-50', label: 'Book Service', link: '/services' },
-                  { icon: ShoppingBag, color: 'text-emerald-500', bg: 'bg-emerald-50', label: 'Buy Product', link: '/store' },
-                  { icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-rose-50', label: 'Emergency Service' },
-                  { icon: MapPin, color: 'text-blue-500', bg: 'bg-blue-50', label: 'Track Booking' },
-                  { icon: Shield, color: 'text-purple-500', bg: 'bg-purple-50', label: 'My Warranty' },
-                  { icon: Home, color: 'text-amber-500', bg: 'bg-amber-50', label: 'My Home' },
-                ].map((item, i) => (
-                  <Link to={item.link || '#'} key={i} className="bg-white rounded-3xl p-4 py-5 flex flex-col items-center justify-center gap-3 text-center shadow-sm border border-slate-100 hover:shadow-md transition-shadow group cursor-pointer">
-                    <div className={`w-14 h-14 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center group-hover:scale-110 group-hover:-translate-y-1 transition-transform`}>
-                      <item.icon size={26} strokeWidth={2} />
-                    </div>
-                    <span className="text-xs font-bold text-slate-700 leading-tight">{item.label}</span>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Bookings & Orders */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* My Bookings */}
-                <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-bold text-slate-800">My Bookings</h3>
-                    <button className="text-xs font-bold text-indigo-600 hover:underline">View All</button>
-                  </div>
-                  <div className="space-y-5">
-                    {[
-                      { title: 'AC Repair & Service', id: '#BK12345', date: 'Tomorrow 10:00 AM', status: 'Confirmed', statusColor: 'text-indigo-600 bg-indigo-50' },
-                      { title: 'Plumbing Service', id: '#BK12312', date: '12 May 2025 02:00 PM', status: 'Completed', statusColor: 'text-emerald-600 bg-emerald-50' },
-                      { title: 'Deep Cleaning', id: '#BK12233', date: '18 May 2025 11:00 AM', status: 'Pending', statusColor: 'text-amber-600 bg-amber-50' },
-                    ].map((item, i) => (
-                      <div key={i} className="flex gap-4 items-center group cursor-pointer">
-                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center shrink-0 border border-slate-100 text-indigo-500 group-hover:bg-indigo-50 transition-colors"><Wrench size={20}/></div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-bold text-slate-800 truncate">{item.title}</h4>
-                          <div className="flex justify-between items-center mt-1">
-                            <div className="flex flex-col">
-                              <span className="text-[10px] text-slate-400 font-medium leading-tight">Booking ID: {item.id}</span>
-                              <span className="text-[10px] text-slate-500 font-bold leading-tight mt-0.5">{item.date.split(' ')[0]} {item.date.split(' ')[1]}</span>
-                            </div>
-                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md ${item.statusColor}`}>{item.status}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* My Orders */}
-                <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-bold text-slate-800">My Orders</h3>
-                    <button className="text-xs font-bold text-indigo-600 hover:underline">View All</button>
-                  </div>
-                  <div className="space-y-5">
-                    {[
-                      { title: 'Samsung Washing Machine', id: '#ORD12345', status: 'Delivered', statusColor: 'text-emerald-500' },
-                      { title: 'Kent RO Water Purifier', id: '#ORD12312', status: 'Shipped', statusColor: 'text-blue-500' },
-                      { title: 'Philips Mixer Grinder', id: '#ORD12231', status: 'Processing', statusColor: 'text-amber-500' },
-                    ].map((item, i) => (
-                      <div key={i} className="flex gap-4 items-center group cursor-pointer">
-                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center shrink-0 border border-slate-100 text-slate-600 group-hover:bg-slate-100 transition-colors"><Package size={20}/></div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-bold text-slate-800 truncate">{item.title}</h4>
-                          <span className="text-[10px] text-slate-400 font-medium block mt-0.5">Order ID: {item.id}</span>
-                          <span className={`text-[10px] font-bold mt-0.5 block ${item.statusColor}`}>{item.status}</span>
-                        </div>
-                        <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors"/>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Recommended For You */}
-              <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="font-bold text-slate-800">Recommended For You</h3>
-                  <button className="text-xs font-bold text-indigo-600 hover:underline">View All</button>
-                </div>
-                <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
-                   {[
-                     { name: 'AC Service', icon: Wrench, color: 'text-blue-500' },
-                     { name: 'RO Service', icon: Droplet, color: 'text-cyan-500' },
-                     { name: 'Electrician', icon: Zap, color: 'text-amber-500' },
-                     { name: 'Pest Control', icon: Bug, color: 'text-rose-500' },
-                     { name: 'Painting', icon: Paintbrush, color: 'text-purple-500' },
-                     { name: 'Carpentry', icon: Hammer, color: 'text-amber-700' },
-                     { name: 'Home Cleaning', icon: Sparkles, color: 'text-teal-500' },
-                     { name: 'More', icon: Grid, color: 'text-slate-500' },
-                   ].map((item, i) => (
-                     <div key={i} className="flex flex-col items-center justify-center gap-2 group cursor-pointer">
-                       <div className="bg-slate-50 w-14 h-14 rounded-2xl flex items-center justify-center border border-slate-100 group-hover:bg-white group-hover:shadow-md group-hover:border-slate-200 transition-all">
-                         <item.icon size={22} className={`${item.color} group-hover:scale-110 transition-transform`} />
-                       </div>
-                       <span className="text-[10px] font-bold text-slate-600 text-center leading-tight whitespace-nowrap">{item.name}</span>
-                     </div>
-                   ))}
-                </div>
-              </div>
-
+      {/* 2. Quick Action Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+        {[
+          { icon: Zap, label: 'Book Service', color: 'text-blue-600', bg: 'bg-blue-50', link: '/services' },
+          { icon: ShoppingBag, label: 'Buy Product', color: 'text-emerald-600', bg: 'bg-emerald-50', link: '/store' },
+          { icon: Shield, label: 'Warranty', color: 'text-purple-600', bg: 'bg-purple-50' },
+          { icon: MapPin, label: 'Track', color: 'text-orange-500', bg: 'bg-orange-50' },
+          { icon: Home, label: 'My Home', color: 'text-indigo-600', bg: 'bg-indigo-50' },
+          { icon: AlertTriangle, label: 'Emergency', color: 'text-red-500', bg: 'bg-red-50' },
+        ].map((item, i) => (
+          <Link to={item.link || '#'} key={i} className="dashboard-card p-4 flex flex-col items-center justify-center gap-3 text-center group cursor-pointer h-[110px]">
+            <div className={`w-12 h-12 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+              <item.icon size={24} strokeWidth={2.5} />
             </div>
+            <span className="text-xs font-bold text-slate-700">{item.label}</span>
+          </Link>
+        ))}
+      </div>
 
-            {/* Right Column (1/3 width) */}
-            <div className="space-y-6">
-              
-              {/* Home Health Score */}
-              <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-                <h3 className="font-bold text-slate-800 mb-6 text-sm">Home Health Score</h3>
-                <div className="flex justify-center mb-8">
-                  <div className="relative w-32 h-32 flex items-center justify-center">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="64" cy="64" r="56" fill="transparent" stroke="#f1f5f9" strokeWidth="8" />
-                      <circle cx="64" cy="64" r="56" fill="transparent" stroke="#10b981" strokeWidth="8" strokeDasharray="351.8" strokeDashoffset={351.8 * (1 - 86/100)} className="transition-all duration-1000" strokeLinecap="round" />
-                    </svg>
-                    <div className="absolute flex flex-col items-center justify-center mt-1">
-                      <span className="text-3xl font-black text-slate-800 tracking-tighter">86</span>
-                      <span className="text-[10px] font-bold text-slate-500">Excellent</span>
-                    </div>
-                  </div>
+      {/* 3. KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+         {[
+           { value: '2', label: 'Upcoming', icon: Calendar },
+           { value: '4', label: 'Orders', icon: Package },
+           { value: '₹1,250', label: 'Wallet', icon: Wallet },
+           { value: '98%', label: 'Home Health', icon: Heart },
+           { value: '450', label: 'Reward Pts', icon: Star },
+           { value: '3', label: 'Coupons', icon: Tag },
+         ].map((stat, i) => (
+           <div key={i} className="dashboard-card p-4 flex flex-col justify-between h-[100px]">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400"><stat.icon size={16} /></span>
+              </div>
+              <div>
+                <div className="text-xl font-black text-slate-800">{stat.value}</div>
+                <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{stat.label}</div>
+              </div>
+           </div>
+         ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left Column (2/3) */}
+        <div className="lg:col-span-2 space-y-6">
+          
+          {/* 4. Booking Timeline */}
+          <div className="dashboard-card p-6">
+             <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold text-slate-800">Active Booking</h2>
+                <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold">Tomorrow, 10 AM</span>
+             </div>
+             
+             <div className="flex items-center gap-4 mb-8">
+               <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center shrink-0">
+                  <Wrench className="text-blue-600" size={24} />
+               </div>
+               <div>
+                  <h3 className="font-bold text-slate-900">AC Repair & Service</h3>
+                  <p className="text-sm font-semibold text-slate-500">LG Split AC (Master Bedroom)</p>
+               </div>
+             </div>
+
+             {/* Beautiful Timeline */}
+             <div className="relative flex justify-between items-center w-full max-w-md mx-auto px-4 mb-4">
+                <div className="absolute top-1/2 left-8 right-8 h-1 bg-slate-100 -translate-y-1/2 z-0"></div>
+                <div className="absolute top-1/2 left-8 w-1/3 h-1 bg-green-500 -translate-y-1/2 z-0"></div>
+                
+                <div className="relative z-10 flex flex-col items-center gap-2">
+                   <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
+                      <Check size={16} strokeWidth={3} />
+                   </div>
+                   <span className="text-xs font-bold text-slate-700">Confirmed</span>
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="flex items-center gap-2 text-slate-700 font-bold"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> AC Service Due</span>
-                    <span className="text-emerald-500 font-bold">In 12 days</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="flex items-center gap-2 text-slate-700 font-bold"><div className="w-2 h-2 rounded-full bg-amber-500"></div> RO Filter Due</span>
-                    <span className="text-amber-500 font-bold">In 5 days</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="flex items-center gap-2 text-slate-700 font-bold"><div className="w-2 h-2 rounded-full bg-rose-500"></div> Deep Cleaning Due</span>
-                    <span className="text-rose-500 font-bold">Overdue</span>
-                  </div>
+                <div className="relative z-10 flex flex-col items-center gap-2">
+                   <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
+                      <User size={16} />
+                   </div>
+                   <span className="text-xs font-bold text-blue-600">Assigned</span>
                 </div>
-              </div>
 
-              {/* Upcoming Booking */}
-              <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-bold text-slate-800 text-sm">Upcoming Booking</h3>
-                  <button className="text-xs font-bold text-indigo-600 hover:underline">View All</button>
+                <div className="relative z-10 flex flex-col items-center gap-2">
+                   <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center ring-4 ring-white shadow-sm">
+                      <Truck size={16} />
+                   </div>
+                   <span className="text-xs font-bold text-slate-400">On the Way</span>
                 </div>
-                <div className="flex gap-4 items-center">
-                  <div className="w-16 h-16 bg-slate-50 rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
-                    <Wrench className="text-indigo-400" size={24}/>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-sm font-bold text-slate-800">AC Repair & Service</h4>
-                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Technician: Raj Kumar</p>
-                    <p className="text-[10px] text-slate-500 font-bold flex items-center gap-1 mt-1"><CalendarDays size={10} className="text-slate-400"/> Tomorrow, 10:00 AM</p>
-                  </div>
-                </div>
-                <div className="flex justify-end mt-1">
-                  <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">Confirmed</span>
-                </div>
-              </div>
+             </div>
+          </div>
 
-              {/* Wallet Balance */}
-              <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center shrink-0 border border-blue-100">
-                    <Wallet size={20}/>
+          {/* 5. Service Recommendations */}
+          <div>
+            <div className="flex justify-between items-end mb-4">
+              <h2 className="text-lg font-bold text-slate-800">Recommended Services</h2>
+              <button className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1">View All <ArrowRight size={16} /></button>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              {[
+                { title: 'Home Cleaning', icon: Sparkles, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                { title: 'Electrical', icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },
+                { title: 'Painting', icon: Paintbrush, color: 'text-purple-500', bg: 'bg-purple-50' },
+                { title: 'Pest Control', icon: Bug, color: 'text-rose-500', bg: 'bg-rose-50' },
+                { title: 'Plumbing', icon: Droplet, color: 'text-blue-500', bg: 'bg-blue-50' },
+              ].map((service, i) => (
+                <div key={i} className="dashboard-card p-4 min-w-[160px] flex flex-col items-center justify-center text-center gap-3 cursor-pointer group">
+                  <div className={`w-12 h-12 rounded-2xl ${service.bg} ${service.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <service.icon size={24} />
                   </div>
-                  <div>
-                    <p className="text-[11px] font-bold text-slate-500 mb-0.5">Wallet Balance</p>
-                    <p className="text-lg font-black text-slate-800">₹1,250.00</p>
-                  </div>
+                  <span className="text-sm font-bold text-slate-700">{service.title}</span>
                 </div>
-                <button className="bg-indigo-600 text-white text-[11px] font-bold px-4 py-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">Add Money</button>
-              </div>
-
-              {/* Invite & Earn */}
-              <div className="bg-[#EEF2FF] rounded-[2rem] p-6 border border-[#E0E7FF] relative overflow-hidden flex items-center">
-                <div className="relative z-10 flex-1 pr-12">
-                  <h3 className="font-black text-indigo-950 mb-1 text-sm">Invite & Earn</h3>
-                  <p className="text-[11px] font-medium text-indigo-800/80 mb-4 leading-relaxed">Invite your friends and earn exciting rewards</p>
-                  <button className="bg-white text-indigo-600 text-[11px] font-bold px-4 py-2 rounded-xl shadow-sm border border-indigo-100 hover:bg-indigo-50 transition-colors">Invite Now</button>
-                </div>
-                <div className="absolute right-[-10px] bottom-[-10px] transform -rotate-6">
-                   <Gift size={90} className="text-indigo-200" strokeWidth={1.5} />
-                </div>
-              </div>
-
+              ))}
             </div>
           </div>
-        </motion.div>
-      );
-    }
 
-    // Fallback for other tabs (Mock for now since they are under development)
-    return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-        <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-          <Activity size={48} className="text-slate-300" />
+          {/* 6. Marketplace Products */}
+          <div>
+            <div className="flex justify-between items-end mb-4">
+              <h2 className="text-lg font-bold text-slate-800">Featured Products</h2>
+              <button className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1">Go to Shop <ArrowRight size={16} /></button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               {[
+                 { name: 'LG 1.5 Ton 5 Star AI Dual Inverter Split AC', price: '₹42,999', rating: '4.8', img: 'https://images.unsplash.com/photo-1627986064973-2e069504c5dc?q=80&w=400' },
+                 { name: 'Dyson V12 Detect Slim Absolute Vacuum', price: '₹55,900', rating: '4.9', img: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?q=80&w=400' },
+               ].map((prod, i) => (
+                 <div key={i} className="dashboard-card p-3 flex gap-4 cursor-pointer group">
+                    <div className="w-24 h-24 rounded-xl bg-slate-100 overflow-hidden shrink-0">
+                      <img src={prod.img} alt={prod.name} className="w-full h-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                       <h3 className="text-sm font-bold text-slate-800 line-clamp-2 leading-snug mb-1">{prod.name}</h3>
+                       <div className="flex items-center gap-1 mb-2">
+                         <Star className="fill-amber-400 text-amber-400" size={12} />
+                         <span className="text-[11px] font-bold text-slate-600">{prod.rating}</span>
+                       </div>
+                       <div className="text-sm font-black text-blue-600">{prod.price}</div>
+                    </div>
+                 </div>
+               ))}
+            </div>
+          </div>
+          
+          {/* 7. Analytics Charts */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="dashboard-card p-5">
+              <h3 className="text-sm font-bold text-slate-700 mb-4">Monthly Spending</h3>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={spendingData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(val) => `₹${val/1000}k`} />
+                    <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                    <Line type="monotone" dataKey="spend" stroke="#2563EB" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            
+            <div className="dashboard-card p-5">
+              <h3 className="text-sm font-bold text-slate-700 mb-4">Bookings Overview</h3>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={bookingsData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+                    <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                    <Bar dataKey="count" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <h3 className="text-2xl font-black text-slate-900 mb-2">{activeTab}</h3>
-        <p className="text-slate-500 font-medium max-w-sm">This module is currently under development. Detailed features will be added here soon.</p>
-        <button onClick={() => setActiveTab('Overview')} className="mt-8 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-slate-900/20 transition-all">
-          Back to Dashboard
-        </button>
+
+        {/* Right Column (1/3) */}
+        <div className="space-y-6">
+          
+          {/* 8. Live Tracking Widget */}
+          <div className="dashboard-card overflow-hidden">
+             <div className="h-32 bg-slate-200 relative">
+               <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800" alt="Map" className="w-full h-full object-cover opacity-70" />
+               <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
+               
+               {/* Map Markers Fake */}
+               <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+               <div className="absolute top-1/3 left-1/3 w-6 h-6 bg-slate-900 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white"><Home size={10} /></div>
+             </div>
+             
+             <div className="p-5">
+                <div className="flex items-center gap-3 mb-4">
+                   <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden">
+                      <img src="https://ui-avatars.com/api/?name=Rakesh+Kumar&background=random" alt="Tech" />
+                   </div>
+                   <div>
+                     <h4 className="font-bold text-slate-900 text-sm">Rakesh Kumar</h4>
+                     <p className="text-xs font-semibold text-slate-500">AC Technician (4.9 ⭐)</p>
+                   </div>
+                </div>
+                
+                <div className="flex justify-between items-center bg-slate-50 rounded-xl p-3 mb-4 border border-slate-100">
+                   <div className="text-center">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase">Distance</p>
+                      <p className="text-sm font-black text-slate-800">2.3 km</p>
+                   </div>
+                   <div className="w-px h-6 bg-slate-200"></div>
+                   <div className="text-center">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase">ETA</p>
+                      <p className="text-sm font-black text-blue-600">12 min</p>
+                   </div>
+                </div>
+                
+                <button className="w-full py-2.5 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors">Track Live</button>
+             </div>
+          </div>
+
+          {/* 9. Professional Activity Feed */}
+          <div className="dashboard-card p-6">
+             <div className="flex items-center justify-between mb-6">
+                <h2 className="text-base font-bold text-slate-800">Recent Activity</h2>
+                <button className="text-slate-400 hover:text-slate-700"><MoreHorizontal size={20} /></button>
+             </div>
+             
+             <div className="space-y-6">
+                {[
+                  { icon: CheckCircle, color: 'text-emerald-500', bg: 'bg-emerald-50', title: 'Payment Successful', desc: '₹42,999 for LG AC', time: '2 hours ago' },
+                  { icon: Calendar, color: 'text-blue-500', bg: 'bg-blue-50', title: 'Booking Confirmed', desc: 'AC Repair tomorrow at 10 AM', time: '4 hours ago' },
+                  { icon: Shield, color: 'text-purple-500', bg: 'bg-purple-50', title: 'Warranty Activated', desc: '1 year extended warranty', time: 'Yesterday' },
+                  { icon: Package, color: 'text-amber-500', bg: 'bg-amber-50', title: 'Product Delivered', desc: 'Dyson V12 Vacuum', time: '2 days ago' },
+                  { icon: Tag, color: 'text-rose-500', bg: 'bg-rose-50', title: 'Coupon Applied', desc: 'Saved ₹500 on cleaning', time: '1 week ago' },
+                ].map((act, i) => (
+                  <div key={i} className="flex gap-4 group cursor-pointer">
+                    <div className="relative">
+                      <div className={`w-10 h-10 rounded-xl ${act.bg} ${act.color} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+                        <act.icon size={18} strokeWidth={2.5} />
+                      </div>
+                      {i !== 4 && <div className="absolute top-10 bottom-[-24px] left-1/2 w-0.5 bg-slate-100 -translate-x-1/2"></div>}
+                    </div>
+                    <div className="flex-1 pb-1">
+                      <h4 className="text-sm font-bold text-slate-800">{act.title}</h4>
+                      <p className="text-xs font-semibold text-slate-500">{act.desc}</p>
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-400">{act.time}</span>
+                  </div>
+                ))}
+             </div>
+          </div>
+          
+        </div>
       </div>
-    );
-  };
+    </motion.div>
+  );
 
   return (
     <DashboardLayout 
@@ -293,9 +334,7 @@ const CustomerDashboard = () => {
       activeTab={activeTab} 
       setActiveTab={setActiveTab}
     >
-      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
-        {renderContent()}
-      </div>
+      {renderOverview()}
     </DashboardLayout>
   );
 };
