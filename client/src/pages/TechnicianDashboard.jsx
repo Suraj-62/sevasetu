@@ -155,7 +155,7 @@ const TechnicianDashboard = () => {
                     <div className="w-12 text-right pt-1 shrink-0"><span className="text-[9px] font-bold text-slate-500 block leading-tight">12:30<br/>PM</span></div>
                     <div className="w-3 h-3 rounded-full bg-slate-300 border-[3px] border-white shadow-sm relative z-10 mt-1.5 shrink-0"></div>
                     <div className="flex-1 bg-white p-3 rounded-xl border border-slate-100">
-                       <div className="absolute top-3 right-3 text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">Upcoming</div>
+                       <div className="absolute top-3 right-3 text-[9px] font-bold text-[#0F766E] bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100">Upcoming</div>
                        <h4 className="text-xs font-bold text-slate-800 mb-1">Electrical Wiring</h4>
                        <p className="text-[10px] text-slate-500 flex items-center gap-1 mb-0.5"><User size={10}/> Neha Singh</p>
                        <p className="text-[10px] text-slate-500 flex items-center gap-1"><MapPin size={10}/> Ranchi, Jharkhand</p>
@@ -218,7 +218,7 @@ const TechnicianDashboard = () => {
               </div>
               <div className="space-y-4">
                 {[
-                  { title: 'AC Repair', loc: 'Ranchi, Jharkhand', dist: '1.2 km away', price: '₹350', icon: Wrench, color: 'text-blue-500', bg: 'bg-blue-50' },
+                  { title: 'AC Repair', loc: 'Ranchi, Jharkhand', dist: '1.2 km away', price: '₹350', icon: Wrench, color: 'text-blue-500', bg: 'bg-teal-50' },
                   { title: 'Electrical Inspection', loc: 'Ranchi, Jharkhand', dist: '1.8 km away', price: '₹250', icon: Power, color: 'text-amber-500', bg: 'bg-amber-50' },
                   { title: 'Fan Repair', loc: 'Ranchi, Jharkhand', dist: '2.5 km away', price: '₹150', icon: Activity, color: 'text-slate-700', bg: 'bg-slate-100' },
                 ].map((job, i) => (

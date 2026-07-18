@@ -37,10 +37,10 @@ const Navbar = () => {
           
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group z-50">
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 bg-[#0F766E] rounded-xl flex items-center justify-center shadow-lg shadow-[#0F766E]/20 group-hover:scale-105 transition-transform">
               <Shield className="text-white" size={22} />
             </div>
-            <span className="font-black text-2xl tracking-tight text-slate-900">Seva<span className="text-blue-600">Setu</span></span>
+            <span className="font-black text-2xl tracking-tight text-slate-900">Seva<span className="text-[#0F766E]">Setu</span></span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -50,7 +50,7 @@ const Navbar = () => {
                 key={link.name} 
                 to={link.path}
                 className={`text-[15px] font-bold transition-colors ${
-                  isActive(link.path) ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600'
+                  isActive(link.path) ? 'text-[#0F766E]' : 'text-slate-600 hover:text-[#0F766E]'
                 }`}
               >
                 {link.name}
@@ -62,13 +62,13 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-4">
             <Link 
               to="/login"
-              className="text-[15px] font-bold text-slate-700 hover:text-blue-600 transition-colors px-4 py-2"
+              className="text-[15px] font-bold text-slate-700 hover:text-[#0F766E] transition-colors px-4 py-2"
             >
               Login
             </Link>
             <Link 
               to="/register"
-              className="bg-blue-600 hover:bg-blue-700 text-white text-[15px] font-bold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+              className="bg-[#0F766E] hover:bg-[#115E59] text-white text-[15px] font-bold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
             >
               Sign Up
             </Link>
@@ -76,7 +76,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden z-50 p-2 text-slate-600 hover:text-blue-600 transition-colors"
+            className="md:hidden z-50 p-2 text-slate-600 hover:text-[#0F766E] transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -101,7 +101,7 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={`text-xl font-bold ${
-                    isActive(link.path) ? 'text-blue-600' : 'text-slate-700'
+                    isActive(link.path) ? 'text-[#0F766E]' : 'text-slate-700'
                   }`}
                 >
                   {link.name}
@@ -112,14 +112,14 @@ const Navbar = () => {
                 <Link 
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="w-full text-center text-lg font-bold text-slate-700 hover:text-blue-600 transition-colors py-3 bg-slate-50 rounded-xl"
+                  className="w-full text-center text-lg font-bold text-slate-700 hover:text-[#0F766E] transition-colors py-3 bg-slate-50 rounded-xl"
                 >
                   Login
                 </Link>
                 <Link 
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold py-3 rounded-xl shadow-sm"
+                  className="w-full text-center bg-[#0F766E] hover:bg-[#115E59] text-white text-lg font-bold py-3 rounded-xl shadow-sm"
                 >
                   Sign Up
                 </Link>

@@ -34,11 +34,11 @@ const ServicesList = () => {
               <input 
                 type="text" 
                 placeholder="Search for a service..." 
-                className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+                className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0F766E] shadow-sm"
               />
             </div>
             {/* AI Smart Search Placeholder */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-full px-6 py-3 flex items-center text-blue-700 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-teal-100 rounded-full px-6 py-3 flex items-center text-[#0F766E] shadow-sm cursor-pointer hover:shadow-md transition-shadow">
               <span className="text-sm font-medium">✨ Ask AI to find service</span>
             </div>
           </div>
@@ -58,7 +58,7 @@ const ServicesList = () => {
                   <li key={idx}>
                     <button 
                       onClick={() => setActiveCategory(cat)}
-                      className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${activeCategory === cat ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+                      className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${activeCategory === cat ? 'bg-teal-50 text-[#0F766E] font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
                     >
                       {cat}
                     </button>
@@ -98,7 +98,7 @@ const ServicesList = () => {
                   
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                     <span className="text-2xl font-bold text-gray-900">{service.price}</span>
-                    <Link to="/book" className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full font-medium transition-colors">
+                    <Link to="/book" className="bg-teal-50 text-[#0F766E] hover:bg-[#0F766E] hover:text-white px-6 py-2 rounded-full font-medium transition-colors">
                       Book Now
                     </Link>
                   </div>

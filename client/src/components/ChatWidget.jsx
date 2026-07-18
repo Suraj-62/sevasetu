@@ -27,7 +27,7 @@ const ChatWidget = () => {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-2xl hover:bg-blue-700 transition-all z-50 ${isOpen ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-6 right-6 bg-[#0F766E] text-white p-4 rounded-full shadow-2xl hover:bg-[#115E59] transition-all z-50 ${isOpen ? 'hidden' : 'flex'}`}
       >
         <MessageSquare size={24} />
       </button>
@@ -42,7 +42,7 @@ const ChatWidget = () => {
             style={{ height: '500px' }}
           >
             {/* Header */}
-            <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
+            <div className="bg-[#0F766E] text-white p-4 flex justify-between items-center">
               <div>
                 <h3 className="font-bold">Chat with Technician</h3>
                 <p className="text-xs text-blue-200">Ramesh Kumar - AC Specialist</p>
@@ -55,7 +55,7 @@ const ChatWidget = () => {
             {/* Messages */}
             <div className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-3">
               {messages.map((msg) => (
-                <div key={msg.id} className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${msg.sender === 'customer' ? 'bg-blue-600 text-white self-end rounded-tr-none' : 'bg-white border border-gray-200 text-gray-800 self-start rounded-tl-none'}`}>
+                <div key={msg.id} className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${msg.sender === 'customer' ? 'bg-[#0F766E] text-white self-end rounded-tr-none' : 'bg-white border border-gray-200 text-gray-800 self-start rounded-tl-none'}`}>
                   {msg.text}
                 </div>
               ))}
@@ -68,9 +68,9 @@ const ChatWidget = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..." 
-                className="flex-1 bg-gray-100 rounded-full px-4 py-2 outline-none text-sm focus:ring-2 focus:ring-blue-500"
+                className="flex-1 bg-gray-100 rounded-full px-4 py-2 outline-none text-sm focus:ring-2 focus:ring-[#0F766E]"
               />
-              <button type="submit" className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors shrink-0">
+              <button type="submit" className="bg-[#0F766E] text-white p-2 rounded-full hover:bg-[#115E59] transition-colors shrink-0">
                 <Send size={18} />
               </button>
             </form>

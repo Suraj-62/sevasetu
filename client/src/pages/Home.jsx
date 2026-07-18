@@ -47,7 +47,7 @@ const POPULAR_SERVICES = [
 const popularSearches = ['AC Repair', 'Cleaning', 'Electrician', 'RO Service', 'Painting'];
 
 const categories = [
-  { icon: Wind, name: 'AC', desc: 'Repair & Service', color: 'text-blue-500', bg: 'bg-blue-50' },
+  { icon: Wind, name: 'AC', desc: 'Repair & Service', color: 'text-blue-500', bg: 'bg-teal-50' },
   { icon: Sofa, name: 'Cleaning', desc: 'Deep Home Clean', color: 'text-emerald-500', bg: 'bg-emerald-50' },
   { icon: Zap, name: 'Electrician', desc: 'Wiring & Fixes', color: 'text-amber-500', bg: 'bg-amber-50' },
   { icon: Droplets, name: 'Plumbing', desc: 'Pipes & Leaks', color: 'text-cyan-500', bg: 'bg-cyan-50' },
@@ -329,7 +329,7 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {usps.map((usp, i) => (
                 <div key={i} className="flex gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0F766E] flex items-center justify-center shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-teal-50 text-[#0F766E] flex items-center justify-center shrink-0">
                     <usp.icon size={28} />
                   </div>
                   <div>
@@ -497,7 +497,7 @@ const Home = () => {
                   className="w-full text-left px-6 py-4 flex justify-between items-center font-bold text-lg text-[#0F172A]"
                 >
                   {faq.q}
-                  <span className="text-blue-600 bg-blue-50 p-1 rounded-full">{openFaq === i ? <Minus size={20} /> : <Plus size={20} />}</span>
+                  <span className="text-[#0F766E] bg-teal-50 p-1 rounded-full">{openFaq === i ? <Minus size={20} /> : <Plus size={20} />}</span>
                 </button>
                 <motion.div 
                   initial={{ height: 0 }} 

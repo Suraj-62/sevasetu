@@ -62,9 +62,9 @@ const CustomerDashboard = () => {
           <div className="flex flex-wrap gap-3">
              <div className="relative flex-1 min-w-[200px] max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                <input type="text" placeholder="Search services..." className="w-full pl-10 pr-4 py-2.5 bg-white rounded-xl text-sm font-semibold border-none focus:ring-2 focus:ring-blue-500 shadow-sm outline-none" />
+                <input type="text" placeholder="Search services..." className="w-full pl-10 pr-4 py-2.5 bg-white rounded-xl text-sm font-semibold border-none focus:ring-2 focus:ring-[#0F766E] shadow-sm outline-none" />
              </div>
-             <button className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-sm transition-colors">Book Service</button>
+             <button className="bg-[#0F766E] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#115E59] shadow-sm transition-colors">Book Service</button>
              <button className="bg-white text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-50 shadow-sm transition-colors border border-slate-200">Buy Product</button>
              <button className="bg-red-50 text-red-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors hidden sm:block">Emergency</button>
           </div>
@@ -74,7 +74,7 @@ const CustomerDashboard = () => {
       {/* 2. Quick Action Cards */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         {[
-          { icon: Zap, label: 'Book Service', color: 'text-blue-600', bg: 'bg-blue-50', link: '/services' },
+          { icon: Zap, label: 'Book Service', color: 'text-[#0F766E]', bg: 'bg-teal-50', link: '/services' },
           { icon: ShoppingBag, label: 'Buy Product', color: 'text-emerald-600', bg: 'bg-emerald-50', link: '/store' },
           { icon: Shield, label: 'Warranty', color: 'text-purple-600', bg: 'bg-purple-50' },
           { icon: MapPin, label: 'Track', color: 'text-orange-500', bg: 'bg-orange-50' },
@@ -121,12 +121,12 @@ const CustomerDashboard = () => {
           <div className="dashboard-card p-6">
              <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-slate-800">Active Booking</h2>
-                <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold">Tomorrow, 10 AM</span>
+                <span className="px-3 py-1 bg-teal-50 text-[#0F766E] rounded-lg text-xs font-bold">Tomorrow, 10 AM</span>
              </div>
              
              <div className="flex items-center gap-4 mb-8">
                <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center shrink-0">
-                  <Wrench className="text-blue-600" size={24} />
+                  <Wrench className="text-[#0F766E]" size={24} />
                </div>
                <div>
                   <h3 className="font-bold text-slate-900">AC Repair & Service</h3>
@@ -147,10 +147,10 @@ const CustomerDashboard = () => {
                 </div>
                 
                 <div className="relative z-10 flex flex-col items-center gap-2">
-                   <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
+                   <div className="w-8 h-8 rounded-full bg-[#0F766E] text-white flex items-center justify-center ring-4 ring-white shadow-sm">
                       <User size={16} />
                    </div>
-                   <span className="text-xs font-bold text-blue-600">Assigned</span>
+                   <span className="text-xs font-bold text-[#0F766E]">Assigned</span>
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center gap-2">
@@ -166,7 +166,7 @@ const CustomerDashboard = () => {
           <div>
             <div className="flex justify-between items-end mb-4">
               <h2 className="text-lg font-bold text-slate-800">Recommended Services</h2>
-              <button className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1">View All <ArrowRight size={16} /></button>
+              <button className="text-sm font-bold text-[#0F766E] hover:text-[#0F766E] flex items-center gap-1">View All <ArrowRight size={16} /></button>
             </div>
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
               {[
@@ -174,7 +174,7 @@ const CustomerDashboard = () => {
                 { title: 'Electrical', icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },
                 { title: 'Painting', icon: Paintbrush, color: 'text-purple-500', bg: 'bg-purple-50' },
                 { title: 'Pest Control', icon: Bug, color: 'text-rose-500', bg: 'bg-rose-50' },
-                { title: 'Plumbing', icon: Droplet, color: 'text-blue-500', bg: 'bg-blue-50' },
+                { title: 'Plumbing', icon: Droplet, color: 'text-blue-500', bg: 'bg-teal-50' },
               ].map((service, i) => (
                 <div key={i} className="dashboard-card p-4 min-w-[160px] flex flex-col items-center justify-center text-center gap-3 cursor-pointer group">
                   <div className={`w-12 h-12 rounded-2xl ${service.bg} ${service.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -190,7 +190,7 @@ const CustomerDashboard = () => {
           <div>
             <div className="flex justify-between items-end mb-4">
               <h2 className="text-lg font-bold text-slate-800">Featured Products</h2>
-              <button className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1">Go to Shop <ArrowRight size={16} /></button>
+              <button className="text-sm font-bold text-[#0F766E] hover:text-[#0F766E] flex items-center gap-1">Go to Shop <ArrowRight size={16} /></button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                {[
@@ -207,7 +207,7 @@ const CustomerDashboard = () => {
                          <Star className="fill-amber-400 text-amber-400" size={12} />
                          <span className="text-[11px] font-bold text-slate-600">{prod.rating}</span>
                        </div>
-                       <div className="text-sm font-black text-blue-600">{prod.price}</div>
+                       <div className="text-sm font-black text-[#0F766E]">{prod.price}</div>
                     </div>
                  </div>
                ))}
@@ -258,7 +258,7 @@ const CustomerDashboard = () => {
                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                
                {/* Map Markers Fake */}
-               <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+               <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-[#0F766E] rounded-full border-2 border-white shadow-lg -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
                <div className="absolute top-1/3 left-1/3 w-6 h-6 bg-slate-900 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white"><Home size={10} /></div>
              </div>
              
@@ -281,7 +281,7 @@ const CustomerDashboard = () => {
                    <div className="w-px h-6 bg-slate-200"></div>
                    <div className="text-center">
                       <p className="text-[10px] font-bold text-slate-400 uppercase">ETA</p>
-                      <p className="text-sm font-black text-blue-600">12 min</p>
+                      <p className="text-sm font-black text-[#0F766E]">12 min</p>
                    </div>
                 </div>
                 
@@ -299,7 +299,7 @@ const CustomerDashboard = () => {
              <div className="space-y-6">
                 {[
                   { icon: CheckCircle, color: 'text-emerald-500', bg: 'bg-emerald-50', title: 'Payment Successful', desc: '₹42,999 for LG AC', time: '2 hours ago' },
-                  { icon: Calendar, color: 'text-blue-500', bg: 'bg-blue-50', title: 'Booking Confirmed', desc: 'AC Repair tomorrow at 10 AM', time: '4 hours ago' },
+                  { icon: Calendar, color: 'text-blue-500', bg: 'bg-teal-50', title: 'Booking Confirmed', desc: 'AC Repair tomorrow at 10 AM', time: '4 hours ago' },
                   { icon: Shield, color: 'text-purple-500', bg: 'bg-purple-50', title: 'Warranty Activated', desc: '1 year extended warranty', time: 'Yesterday' },
                   { icon: Package, color: 'text-amber-500', bg: 'bg-amber-50', title: 'Product Delivered', desc: 'Dyson V12 Vacuum', time: '2 days ago' },
                   { icon: Tag, color: 'text-rose-500', bg: 'bg-rose-50', title: 'Coupon Applied', desc: 'Saved ₹500 on cleaning', time: '1 week ago' },

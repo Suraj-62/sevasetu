@@ -53,7 +53,7 @@ const VendorDashboard = () => {
   const recentOrders = [
     { id: '#ORD12345', name: 'Amit Verma', amount: '₹12,500', status: 'Pending', time: '2 mins ago', color: 'text-orange-500 bg-orange-50 border-orange-100' },
     { id: '#ORD12344', name: 'Neha Singh', amount: '₹8,900', status: 'Confirmed', time: '15 mins ago', color: 'text-emerald-500 bg-emerald-50 border-emerald-100' },
-    { id: '#ORD12343', name: 'Rahul Kumar', amount: '₹6,700', status: 'Processing', time: '30 mins ago', color: 'text-blue-500 bg-blue-50 border-blue-100' },
+    { id: '#ORD12343', name: 'Rahul Kumar', amount: '₹6,700', status: 'Processing', time: '30 mins ago', color: 'text-blue-500 bg-teal-50 border-teal-100' },
     { id: '#ORD12342', name: 'Pooja Kumari', amount: '₹4,200', status: 'Shipped', time: '1 hour ago', color: 'text-indigo-500 bg-indigo-50 border-indigo-100' },
     { id: '#ORD12341', name: 'Suresh Yadav', amount: '₹3,800', status: 'Delivered', time: '2 hours ago', color: 'text-teal-500 bg-teal-50 border-teal-100' },
   ];
@@ -276,7 +276,7 @@ const VendorDashboard = () => {
                <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 h-full items-center">
                   {[
                     { title: 'Add Product', icon: PlusCircle, color: 'text-emerald-500', bg: 'bg-emerald-50', sub: 'List new product' },
-                    { title: 'Manage Inventory', icon: Archive, color: 'text-blue-500', bg: 'bg-blue-50', sub: 'Update stock & price' },
+                    { title: 'Manage Inventory', icon: Archive, color: 'text-blue-500', bg: 'bg-teal-50', sub: 'Update stock & price' },
                     { title: 'Manage Orders', icon: ShoppingCart, color: 'text-amber-500', bg: 'bg-amber-50', sub: 'Process customer orders' },
                     { title: 'Service Requests', icon: Wrench, color: 'text-rose-500', bg: 'bg-rose-50', sub: 'View & assign requests' },
                     { title: 'Create Offer', icon: Tag, color: 'text-purple-500', bg: 'bg-purple-50', sub: 'Add new offers' },

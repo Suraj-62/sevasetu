@@ -16,7 +16,7 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex font-sans text-slate-900 selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] flex font-sans text-slate-900 selection:bg-teal-500 selection:text-white">
       
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
@@ -36,10 +36,10 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
         <div className="p-5 flex flex-col h-full">
           <div className="flex items-center justify-between mb-8 px-2">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 bg-[#0F766E] rounded-xl flex items-center justify-center shadow-md shadow-[#0F766E]/20 group-hover:scale-105 transition-transform">
                   <Shield className="text-white" size={20} />
               </div>
-              <span className="font-black text-xl tracking-tight text-slate-900">Seva<span className="text-blue-600">Setu</span></span>
+              <span className="font-black text-xl tracking-tight text-slate-900">Seva<span className="text-[#0F766E]">Setu</span></span>
             </Link>
             <button onClick={() => setMobileMenuOpen(false)} className="lg:hidden text-slate-400 hover:text-slate-700">
               <X size={22} />
@@ -57,7 +57,7 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
                 <li key={item.name}>
                   {item.link ? (
                     <Link to={item.link} className="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold rounded-2xl transition-all text-[13px] group">
-                      <item.icon size={18} className="mr-3 text-slate-400 group-hover:text-blue-600 transition-colors" /> {item.name}
+                      <item.icon size={18} className="mr-3 text-slate-400 group-hover:text-[#0F766E] transition-colors" /> {item.name}
                     </Link>
                   ) : item.subItems ? (
                     <div>
@@ -66,7 +66,7 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
                         className="w-full flex items-center justify-between px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold rounded-2xl transition-all text-[13px] group"
                       >
                         <div className="flex items-center">
-                          <item.icon size={18} className="mr-3 text-slate-400 group-hover:text-blue-600 transition-colors" /> {item.name}
+                          <item.icon size={18} className="mr-3 text-slate-400 group-hover:text-[#0F766E] transition-colors" /> {item.name}
                         </div>
                         <ChevronDown size={14} className={`text-slate-400 transition-transform duration-200 ${openMenus[item.name] ? 'rotate-180' : ''}`} />
                       </button>
@@ -83,7 +83,7 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
                                 <button
                                   onClick={() => handleNavClick(sub.onClick)}
                                   className={`w-full flex items-center px-3 py-2 text-[13px] font-semibold rounded-xl transition-colors ${
-                                    activeTab === sub.name ? 'text-blue-600 bg-blue-50' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                                    activeTab === sub.name ? 'text-[#0F766E] bg-teal-50' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                                   }`}
                                 >
                                   {sub.name}
@@ -158,7 +158,7 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
               {/* Messages */}
               <button className="relative p-2 text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
                 <MessageSquare size={19} />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-teal-500 rounded-full"></span>
               </button>
 
               {/* Notifications */}
@@ -178,7 +178,7 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
             {/* Profile Dropdown */}
             <div className="relative">
               <button onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} className="flex items-center gap-2 hover:opacity-80 transition-opacity p-1">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs shrink-0 ring-2 ring-white shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[#0F766E] font-bold text-xs shrink-0 ring-2 ring-white shadow-sm">
                   {userName.charAt(0)}
                 </div>
               </button>
@@ -190,8 +190,8 @@ const DashboardLayout = ({ role, userName = "User", navItems, activeTab, setActi
                       <p className="text-sm font-bold text-slate-900">{userName}</p>
                       <p className="text-[11px] font-semibold text-slate-500 uppercase">{role}</p>
                     </div>
-                    <button className="w-full text-left px-4 py-2 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">Profile Settings</button>
-                    <button className="w-full text-left px-4 py-2 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">Support</button>
+                    <button className="w-full text-left px-4 py-2 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors">Profile Settings</button>
+                    <button className="w-full text-left px-4 py-2 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors">Support</button>
                     <div className="h-px bg-slate-100 my-2"></div>
                     <Link to="/login" onClick={() => localStorage.removeItem('userInfo')} className="w-full text-left px-4 py-2 text-[13px] font-semibold text-red-600 hover:bg-red-50 transition-colors block">Sign out</Link>
                   </motion.div>
