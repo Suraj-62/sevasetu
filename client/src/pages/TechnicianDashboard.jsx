@@ -22,8 +22,8 @@ const performanceData = [
 const TechnicianDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
   const [isOnline, setIsOnline] = useState(true);
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'Technician' });
   const [isEmergencyOn, setIsEmergencyOn] = useState(true);
-  const userInfo = JSON.parse(localStorage.getItem('userInfo')) || { name: 'Rajesh' };
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
@@ -58,7 +58,7 @@ const TechnicianDashboard = () => {
               </div>
             </div>
             <div className="text-left md:text-right">
-              <h1 className="text-2xl md:text-3xl font-black text-slate-800 mb-1">Good Morning, {userInfo.name} 👋</h1>
+              <h1 className="text-2xl md:text-3xl font-black text-slate-800 mb-1">Hey, {userInfo.name} 👋</h1>
               <p className="text-sm font-medium text-slate-500">You have 4 jobs scheduled today.</p>
             </div>
           </div>
@@ -305,23 +305,36 @@ const TechnicianDashboard = () => {
               </div>
            </div>
            
-           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert("Settings saved successfully!"); }}>
+           <form className="space-y-6" onSubmit={(e) => { 
+             e.preventDefault(); 
+             const formData = new FormData(e.target);
+             const updatedInfo = {
+               ...userInfo,
+               name: formData.get('name'),
+               email: formData.get('email'),
+               phone: formData.get('phone'),
+               address: formData.get('address')
+             };
+             localStorage.setItem('userInfo', JSON.stringify(updatedInfo));
+             setUserInfo(updatedInfo);
+             alert("Settings saved successfully!"); 
+           }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
-                    <input type="text" defaultValue={userInfo.name} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="text" name="name" defaultValue={userInfo.name} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
-                    <input type="email" defaultValue={userInfo.email || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="email" name="email" defaultValue={userInfo.email || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
-                    <input type="tel" defaultValue={userInfo.phone || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="tel" name="phone" defaultValue={userInfo.phone || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Service Area</label>
-                    <input type="text" defaultValue="Ranchi, Jharkhand" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="text" name="address" defaultValue={userInfo.address || 'Ranchi, Jharkhand'} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
               </div>
               <div className="pt-4 flex justify-end">

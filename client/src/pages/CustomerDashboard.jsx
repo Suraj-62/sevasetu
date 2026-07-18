@@ -33,7 +33,7 @@ const bookingsData = [
 const CustomerDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
   const { bookings, orders } = useStore();
-  const userInfo = JSON.parse(localStorage.getItem('userInfo')) || { name: 'Suraj' };
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'Suraj' });
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
@@ -56,7 +56,7 @@ const CustomerDashboard = () => {
         </div>
         
         <div className="relative z-10 w-full md:w-3/5 pr-4">
-          <h1 className="text-3xl font-black text-slate-800 mb-2 leading-tight tracking-tight">Good Morning {userInfo.name.split(' ')[0]} <span className="inline-block animate-bounce origin-bottom-right">👋</span></h1>
+          <h1 className="text-3xl font-black text-slate-800 mb-2 leading-tight tracking-tight">Hey {userInfo.name.split(' ')[0]} <span className="inline-block animate-bounce origin-bottom-right">👋</span></h1>
           <p className="text-slate-600 font-semibold mb-6">Book trusted home services instantly.</p>
           
           <div className="flex flex-wrap gap-3">
@@ -334,7 +334,58 @@ const CustomerDashboard = () => {
       activeTab={activeTab} 
       setActiveTab={setActiveTab}
     >
-      {activeTab === 'Overview' || activeTab === 'Dashboard' ? renderOverview() : (
+      {activeTab === 'Overview' || activeTab === 'Dashboard' ? renderOverview() : activeTab === 'Settings' ? (
+        <div className="bg-white rounded-[2rem] p-8 shadow-[0_2px_15px_rgb(0,0,0,0.02)] border border-slate-100 max-w-3xl mx-auto mt-8">
+           <div className="flex items-center gap-4 mb-8">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
+                 <Settings size={28} className="text-[#0F766E]" />
+              </div>
+              <div>
+                 <h2 className="text-2xl font-black text-slate-800">Account Settings</h2>
+                 <p className="text-slate-500 font-medium">Update your profile and preferences.</p>
+              </div>
+           </div>
+           
+           <form className="space-y-6" onSubmit={(e) => { 
+             e.preventDefault(); 
+             const formData = new FormData(e.target);
+             const updatedInfo = {
+               ...userInfo,
+               name: formData.get('name'),
+               email: formData.get('email'),
+               phone: formData.get('phone'),
+               address: formData.get('address')
+             };
+             localStorage.setItem('userInfo', JSON.stringify(updatedInfo));
+             setUserInfo(updatedInfo);
+             alert("Settings saved successfully!"); 
+           }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
+                    <input type="text" name="name" defaultValue={userInfo.name} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/20 transition-all font-medium" />
+                 </div>
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
+                    <input type="email" name="email" defaultValue={userInfo.email || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/20 transition-all font-medium" />
+                 </div>
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
+                    <input type="tel" name="phone" defaultValue={userInfo.phone || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/20 transition-all font-medium" />
+                 </div>
+                 <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Address</label>
+                    <input type="text" name="address" defaultValue={userInfo.address || 'Ranchi, Jharkhand'} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/20 transition-all font-medium" />
+                 </div>
+              </div>
+              <div className="pt-4 flex justify-end">
+                 <button type="submit" className="bg-[#0F766E] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#115E59] transition-colors shadow-lg shadow-[#0F766E]/20">
+                    Save Changes
+                 </button>
+              </div>
+           </form>
+        </div>
+      ) : (
         <div className="flex flex-col items-center justify-center h-[60vh] text-center w-full max-w-2xl mx-auto">
           <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6 shadow-inner border-4 border-white shadow-xl">
             <Settings size={40} className="text-[#0F766E]" />

@@ -22,7 +22,7 @@ const revenueData = [
 
 const VendorDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
-  const userInfo = JSON.parse(localStorage.getItem('userInfo')) || { name: 'LG Electronics' };
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'LG Electronics' });
 
   const navItems = [
     { name: 'Dashboard', icon: Home, onClick: () => setActiveTab('Overview') },
@@ -330,23 +330,36 @@ const VendorDashboard = () => {
               </div>
            </div>
            
-           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert("Shop settings saved successfully!"); }}>
+           <form className="space-y-6" onSubmit={(e) => { 
+             e.preventDefault(); 
+             const formData = new FormData(e.target);
+             const updatedInfo = {
+               ...userInfo,
+               name: formData.get('name'),
+               email: formData.get('email'),
+               address: formData.get('address'),
+               gstin: formData.get('gstin')
+             };
+             localStorage.setItem('userInfo', JSON.stringify(updatedInfo));
+             setUserInfo(updatedInfo);
+             alert("Shop settings saved successfully!"); 
+           }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Shop Name</label>
-                    <input type="text" defaultValue={userInfo.name} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="text" name="name" defaultValue={userInfo.name} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Business Email</label>
-                    <input type="email" defaultValue={userInfo.email || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="email" name="email" defaultValue={userInfo.email || ''} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
                  <div className="md:col-span-2">
                     <label className="block text-sm font-bold text-slate-700 mb-2">Store Address</label>
-                    <textarea rows="3" defaultValue="123 Main Market, Ranchi, Jharkhand" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium resize-none"></textarea>
+                    <textarea name="address" rows="3" defaultValue={userInfo.address || '123 Main Market, Ranchi, Jharkhand'} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium resize-none"></textarea>
                  </div>
                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">GSTIN / Tax ID</label>
-                    <input type="text" defaultValue="20ABCDE1234F1Z5" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
+                    <input type="text" name="gstin" defaultValue={userInfo.gstin || '20ABCDE1234F1Z5'} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all font-medium" />
                  </div>
               </div>
               <div className="pt-4 flex justify-end">
