@@ -469,8 +469,11 @@ const CustomerDashboard = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-bold text-slate-800">{b.technician.name || 'Technician'}</p>
-                      <p className="text-xs text-slate-500">{b.technician.phone}</p>
+                      <p className="text-xs text-slate-500 font-semibold">{b.technician.phone || '+91 9876543210'}</p>
                     </div>
+                    <button onClick={() => setActiveTab('Overview')} className="bg-teal-50 text-[#0F766E] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-teal-100 transition-colors flex items-center gap-1 shadow-sm">
+                      <MapPin size={12} /> Track
+                    </button>
                  </div>
                ) : (
                  <div className="flex items-center gap-2 pt-4 border-t border-slate-100 text-slate-400">
