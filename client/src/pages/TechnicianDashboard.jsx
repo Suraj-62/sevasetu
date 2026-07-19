@@ -34,7 +34,8 @@ const TechnicianDashboard = () => {
     try {
       const token = userInfo?.token;
       if (!token) return;
-      const res = await fetch('/api/bookings/technician', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/bookings/technician`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

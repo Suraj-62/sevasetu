@@ -33,7 +33,8 @@ const VendorDashboard = () => {
     try {
       const token = userInfo?.token;
       if (!token) return;
-      const res = await fetch('/api/orders/vendor', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/orders/vendor`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

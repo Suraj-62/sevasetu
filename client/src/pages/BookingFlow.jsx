@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle } from 'lucide-react';
@@ -7,6 +7,13 @@ const BookingFlow = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (!userInfo) {
+      navigate('/login?redirect=/book');
+    }
+  }, [navigate]);
 
   const mockService = {
     name: "AC Servicing",
@@ -27,7 +34,8 @@ const BookingFlow = () => {
          return;
       }
 
-      const response = await fetch('/api/bookings', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${API_URL}/api/bookings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

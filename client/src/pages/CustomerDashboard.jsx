@@ -45,9 +45,10 @@ const CustomerDashboard = () => {
       const token = userInfo?.token;
       if (!token) return;
 
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       const [resBookings, resOrders] = await Promise.all([
-        fetch('/api/bookings', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('/api/orders', { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`${API_URL}/api/bookings`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_URL}/api/orders`, { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
 
       if (resBookings.ok) {
