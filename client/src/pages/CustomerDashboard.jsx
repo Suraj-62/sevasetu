@@ -160,7 +160,7 @@ const CustomerDashboard = () => {
                </div>
                <div>
                   <h3 className="font-bold text-slate-900">{bookings[0].service}</h3>
-                  <p className="text-sm font-semibold text-slate-500">Status: {bookings[0].status.toUpperCase()}</p>
+                  <p className="text-sm font-semibold text-slate-500">Status: {(bookings[0].status || 'pending').toUpperCase()}</p>
                </div>
              </div>
 
@@ -386,7 +386,7 @@ const CustomerDashboard = () => {
                      </div>
                    </div>
                    <div className="text-right">
-                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${b.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-orange-50 text-orange-600 border border-orange-100'}`}>{b.status.toUpperCase()}</span>
+                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${b.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-orange-50 text-orange-600 border border-orange-100'}`}>{(b.status || 'pending').toUpperCase()}</span>
                    </div>
                  </div>
                ))
@@ -405,12 +405,12 @@ const CustomerDashboard = () => {
                        <Package size={16} />
                      </div>
                      <div>
-                       <h4 className="text-sm font-bold text-slate-800">{o.items[0]?.product}</h4>
+                       <h4 className="text-sm font-bold text-slate-800">{o.items?.[0]?.product || 'Product'}</h4>
                        <p className="text-xs text-slate-500">Total: ₹{o.totalAmount}</p>
                      </div>
                    </div>
                    <div className="text-right">
-                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${o.orderStatus === 'Pending' ? 'bg-orange-50 text-orange-600 border border-orange-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>{o.orderStatus.toUpperCase()}</span>
+                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${o.orderStatus === 'Pending' ? 'bg-orange-50 text-orange-600 border border-orange-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>{(o.orderStatus || 'pending').toUpperCase()}</span>
                    </div>
                  </div>
                ))
