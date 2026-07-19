@@ -423,6 +423,119 @@ const CustomerDashboard = () => {
     </motion.div>
   );
 
+  const renderBookings = () => (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 max-w-6xl mx-auto mt-8">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-2xl font-black text-slate-800">My Bookings</h2>
+          <p className="text-slate-500 font-medium">Track and manage your service requests</p>
+        </div>
+        <Link to="/services" className="bg-[#0F766E] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#115E59] shadow-sm transition-colors flex items-center gap-2">
+          <Plus size={18} /> New Booking
+        </Link>
+      </div>
+
+      {bookings.length === 0 ? (
+        <div className="bg-white rounded-3xl p-12 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
+           <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+             <Calendar size={40} className="text-slate-300" />
+           </div>
+           <h3 className="text-xl font-bold text-slate-700 mb-2">No bookings yet</h3>
+           <p className="text-slate-500 mb-6">You haven't booked any home services yet.</p>
+           <Link to="/services" className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold">Explore Services</Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {bookings.map((b) => (
+            <div key={b._id} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group hover:shadow-md transition-all">
+               <div className={`absolute top-0 left-0 w-1 h-full ${b.status === 'completed' ? 'bg-emerald-500' : 'bg-orange-500'}`}></div>
+               <div className="flex justify-between items-start mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
+                    <Wrench className="text-slate-600" size={24} />
+                  </div>
+                  <span className={`text-[10px] font-bold px-3 py-1 rounded-lg uppercase ${b.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
+                    {(b.status || 'pending')}
+                  </span>
+               </div>
+               <h3 className="text-lg font-bold text-slate-800 mb-1">{b.service}</h3>
+               <p className="text-slate-500 text-sm font-medium mb-6">
+                 {b.scheduledDate ? new Date(b.scheduledDate).toLocaleDateString() : 'Date pending'} • {b.timeSlot || 'Anytime'}
+               </p>
+               
+               {b.technician ? (
+                 <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden flex items-center justify-center">
+                      <User className="text-slate-400" size={18} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-slate-800">{b.technician.name || 'Technician'}</p>
+                      <p className="text-xs text-slate-500">{b.technician.phone}</p>
+                    </div>
+                 </div>
+               ) : (
+                 <div className="flex items-center gap-2 pt-4 border-t border-slate-100 text-slate-400">
+                    <Clock size={16} />
+                    <span className="text-xs font-semibold">Assigning professional...</span>
+                 </div>
+               )}
+            </div>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+
+  const renderOrders = () => (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 max-w-6xl mx-auto mt-8">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-2xl font-black text-slate-800">My Orders</h2>
+          <p className="text-slate-500 font-medium">Track your marketplace purchases</p>
+        </div>
+        <Link to="/store" className="bg-[#0F766E] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#115E59] shadow-sm transition-colors flex items-center gap-2">
+          <ShoppingBag size={18} /> Shop Products
+        </Link>
+      </div>
+
+      {orders.length === 0 ? (
+        <div className="bg-white rounded-3xl p-12 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
+           <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+             <Package size={40} className="text-slate-300" />
+           </div>
+           <h3 className="text-xl font-bold text-slate-700 mb-2">No orders placed</h3>
+           <p className="text-slate-500 mb-6">You haven't bought any products from the marketplace.</p>
+           <Link to="/store" className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold">Visit Store</Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {orders.map((o) => (
+            <div key={o._id} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row gap-6 hover:shadow-md transition-shadow">
+               <div className="w-24 h-24 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
+                  <Package className="text-indigo-500" size={32} />
+               </div>
+               <div className="flex-1 flex flex-col justify-center">
+                 <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-slate-800 text-lg line-clamp-1">{o.items?.[0]?.product || 'Marketplace Item'}</h3>
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase shrink-0 ml-2 ${o.orderStatus === 'Delivered' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+                      {(o.orderStatus || 'pending')}
+                    </span>
+                 </div>
+                 <p className="text-sm font-semibold text-slate-500 mb-4">Ordered on {new Date(o.createdAt).toLocaleDateString()}</p>
+                 <div className="flex justify-between items-end">
+                    <div>
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Total Paid</p>
+                      <p className="font-black text-[#0F766E] text-lg">₹{o.totalAmount}</p>
+                    </div>
+                    <button className="text-sm font-bold text-slate-900 hover:text-[#0F766E]">Track Order</button>
+                 </div>
+               </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+
   return (
     <DashboardLayout 
       role="Customer" 
@@ -431,7 +544,7 @@ const CustomerDashboard = () => {
       activeTab={activeTab} 
       setActiveTab={setActiveTab}
     >
-      {activeTab === 'Overview' || activeTab === 'Dashboard' ? renderOverview() : activeTab === 'Settings' ? (
+      {activeTab === 'Overview' || activeTab === 'Dashboard' ? renderOverview() : activeTab === 'My Bookings' ? renderBookings() : activeTab === 'My Orders' ? renderOrders() : activeTab === 'Settings' ? (
         <div className="bg-white rounded-[2rem] p-8 shadow-[0_2px_15px_rgb(0,0,0,0.02)] border border-slate-100 max-w-3xl mx-auto mt-8">
            <div className="flex items-center gap-4 mb-8">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
