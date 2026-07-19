@@ -4,7 +4,7 @@ import {
   Home, Search, ShoppingBag, Calendar, Package, MapPin, Shield, CalendarDays, 
   CreditCard, Settings, AlertTriangle, Wrench, ChevronRight, MoreHorizontal, 
   Heart, Wallet, Tag, MessageSquare, Bell, Star, User, Activity, Zap, Truck, CheckCircle,
-  Gift, Plus, Droplet, Bug, Paintbrush, Hammer, Sparkles, Grid, Clock, Check, ArrowRight, ArrowUpRight
+  Gift, Plus, Droplet, Bug, Paintbrush, Hammer, Sparkles, Grid, Clock, Check, ArrowRight, ArrowUpRight, Phone, PenTool
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useStore from '../store/useStore';
