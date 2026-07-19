@@ -145,21 +145,41 @@ const CustomerDashboard = () => {
         <div className="lg:col-span-2 space-y-6">
           
           {/* 4. Booking Timeline */}
+          {bookings.length > 0 && (
           <div className="dashboard-card p-6">
              <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-slate-800">Active Booking</h2>
-                <span className="px-3 py-1 bg-teal-50 text-[#0F766E] rounded-lg text-xs font-bold">Tomorrow, 10 AM</span>
+                <span className="px-3 py-1 bg-teal-50 text-[#0F766E] rounded-lg text-xs font-bold">
+                  {bookings[0].scheduledDate ? new Date(bookings[0].scheduledDate).toLocaleDateString() : 'Date Pending'}
+                </span>
              </div>
              
-             <div className="flex items-center gap-4 mb-8">
+             <div className="flex items-center gap-4 mb-6">
                <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center shrink-0">
                   <Wrench className="text-[#0F766E]" size={24} />
                </div>
                <div>
-                  <h3 className="font-bold text-slate-900">AC Repair & Service</h3>
-                  <p className="text-sm font-semibold text-slate-500">LG Split AC (Master Bedroom)</p>
+                  <h3 className="font-bold text-slate-900">{bookings[0].service}</h3>
+                  <p className="text-sm font-semibold text-slate-500">Status: {bookings[0].status.toUpperCase()}</p>
                </div>
              </div>
+
+             {bookings[0].technician && (
+               <div className="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-100 flex items-center justify-between">
+                 <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center">
+                     <User size={20} className="text-slate-400" />
+                   </div>
+                   <div>
+                     <p className="text-sm font-bold text-slate-800">{bookings[0].technician.name || 'Technician'}</p>
+                     <p className="text-xs text-slate-500">{bookings[0].technician.phone || 'Phone pending'}</p>
+                   </div>
+                 </div>
+                 <div className="flex gap-2">
+                   <a href={`tel:${bookings[0].technician.phone}`} className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center hover:bg-green-200 transition-colors"><Phone size={14} /></a>
+                 </div>
+               </div>
+             )}
 
              {/* Beautiful Timeline */}
              <div className="relative flex justify-between items-center w-full max-w-md mx-auto px-4 mb-4">
@@ -174,20 +194,21 @@ const CustomerDashboard = () => {
                 </div>
                 
                 <div className="relative z-10 flex flex-col items-center gap-2">
-                   <div className="w-8 h-8 rounded-full bg-[#0F766E] text-white flex items-center justify-center ring-4 ring-white shadow-sm">
-                      <User size={16} />
+                   <div className={`w-8 h-8 rounded-full ${bookings[0].technician ? 'bg-green-500 text-white' : 'bg-[#0F766E] text-white'} flex items-center justify-center ring-4 ring-white shadow-sm`}>
+                      {bookings[0].technician ? <Check size={16} strokeWidth={3} /> : <User size={16} />}
                    </div>
-                   <span className="text-xs font-bold text-[#0F766E]">Assigned</span>
+                   <span className={`text-xs font-bold ${bookings[0].technician ? 'text-slate-700' : 'text-[#0F766E]'}`}>Assigned</span>
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center gap-2">
-                   <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center ring-4 ring-white shadow-sm">
-                      <Truck size={16} />
+                   <div className={`w-8 h-8 rounded-full ${bookings[0].status === 'completed' ? 'bg-green-500 text-white' : 'bg-slate-200 text-slate-400'} flex items-center justify-center ring-4 ring-white shadow-sm`}>
+                      {bookings[0].status === 'completed' ? <Check size={16} strokeWidth={3} /> : <Truck size={16} />}
                    </div>
-                   <span className="text-xs font-bold text-slate-400">On the Way</span>
+                   <span className={`text-xs font-bold ${bookings[0].status === 'completed' ? 'text-slate-700' : 'text-slate-400'}`}>Completed</span>
                 </div>
              </div>
           </div>
+          )}
 
           {/* 5. Service Recommendations */}
           <div>
@@ -279,6 +300,7 @@ const CustomerDashboard = () => {
         <div className="space-y-6">
           
           {/* 8. Live Tracking Widget */}
+          {bookings.length > 0 && bookings[0].technician && (
           <div className="dashboard-card overflow-hidden">
              <div className="h-32 bg-slate-200 relative">
                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800" alt="Map" className="w-full h-full object-cover opacity-70" />
@@ -291,12 +313,12 @@ const CustomerDashboard = () => {
              
              <div className="p-5">
                 <div className="flex items-center gap-3 mb-4">
-                   <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden">
-                      <img src="https://ui-avatars.com/api/?name=Rakesh+Kumar&background=random" alt="Tech" />
+                   <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden flex items-center justify-center">
+                      <img src={`https://ui-avatars.com/api/?name=${bookings[0].technician.name || 'Technician'}&background=random`} alt="Tech" />
                    </div>
                    <div>
-                     <h4 className="font-bold text-slate-900 text-sm">Rakesh Kumar</h4>
-                     <p className="text-xs font-semibold text-slate-500">AC Technician (4.9 ⭐)</p>
+                     <h4 className="font-bold text-slate-900 text-sm">{bookings[0].technician.name || 'Assigned Technician'}</h4>
+                     <p className="text-xs font-semibold text-slate-500">{bookings[0].technician.phone}</p>
                    </div>
                 </div>
                 
@@ -315,6 +337,7 @@ const CustomerDashboard = () => {
                 <button className="w-full py-2.5 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors">Track Live</button>
              </div>
           </div>
+          )}
 
           {/* 9. Professional Activity Feed */}
           <div className="dashboard-card p-6">

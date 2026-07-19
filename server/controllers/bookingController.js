@@ -26,7 +26,9 @@ const createBooking = async (req, res) => {
 // Get logged in user bookings
 const getMyBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ customer: req.user._id }).sort({ createdAt: -1 });
+    const bookings = await Booking.find({ customer: req.user._id })
+      .populate('technician', 'name phone email')
+      .sort({ createdAt: -1 });
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ message: error.message });
