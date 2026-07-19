@@ -18,13 +18,18 @@ import VerificationPending from './pages/VerificationPending';
 import Store from './pages/Store';
 import ShopDetails from './pages/ShopDetails';
 
+import Help from './pages/Help';
+import Faq from './pages/Faq';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+
 const AppContent = () => {
   const location = useLocation();
   const isDashboard = location.pathname.includes('dashboard');
   const isStoreApp = location.pathname === '/store' || location.pathname.startsWith('/shop/');
   const isAuth = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/verification-pending';
   const isServices = location.pathname.startsWith('/services');
-  const isNoFooterPage = ['/about', '/contact'].includes(location.pathname);
+  const isNoFooterPage = ['/about', '/contact', '/help', '/faq', '/privacy', '/terms'].includes(location.pathname);
   const hideNav = isDashboard || isStoreApp || isAuth || location.pathname === '/book';
   const hideFooter = isDashboard || isStoreApp || isAuth || isServices || isNoFooterPage || location.pathname === '/book';
 
@@ -39,6 +44,10 @@ const AppContent = () => {
           <Route path="/services" element={<ServicesList />} />
           <Route path="/store" element={<Store />} />
           <Route path="/shop/:id" element={<ShopDetails />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/faq" element={<Faq />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/book" element={<BookingFlow />} />
           <Route path="/dashboard/customer" element={<CustomerDashboard />} />
           <Route path="/dashboard/technician" element={<TechnicianDashboard />} />
