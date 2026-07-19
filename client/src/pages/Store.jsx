@@ -94,6 +94,11 @@ const Store = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [showCheckout, setShowCheckout] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    zipCode: ''
+  });
   const navigate = useNavigate();
 
   const filteredProducts = PRODUCTS.filter(p => {
@@ -109,6 +114,10 @@ const Store = () => {
   };
 
   const handleCheckout = async () => {
+    if (!address.street || !address.city || !address.zipCode) {
+      alert("Please enter your complete shipping address before placing the order.");
+      return;
+    }
     setIsProcessing(true);
     try {
       const userInfoString = localStorage.getItem('userInfo');
@@ -141,10 +150,10 @@ const Store = () => {
           vendor: cart[0].vendor,
           items: orderItems,
           shippingAddress: {
-            street: "456 Shopping Avenue",
-            city: "Ranchi",
+            street: address.street,
+            city: address.city,
             state: "Jharkhand",
-            zipCode: "834002"
+            zipCode: address.zipCode
           },
           totalAmount: totalAmount + 99 // adding taxes/shipping
         })
@@ -163,7 +172,8 @@ const Store = () => {
           providerName: cart[0].vendor,
           items: orderItems.map(item => ({ name: item.product, price: item.priceAtPurchase, qty: item.quantity })),
           totalAmount: totalAmount + 99,
-          orderId: data._id || Math.floor(100000 + Math.random() * 900000)
+          orderId: data._id || Math.floor(100000 + Math.random() * 900000),
+          address: address
         } 
       });
     } catch (error) {
@@ -227,9 +237,9 @@ const Store = () => {
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative">
             <h2 className="text-2xl font-black text-[#0F172A] mb-6">Checkout Summary</h2>
-            <div className="space-y-4 max-h-60 overflow-y-auto mb-6">
+            <div className="space-y-4 max-h-40 overflow-y-auto mb-6 border-b border-slate-100 pb-4">
               {cart.map((item, idx) => (
-                <div key={idx} className="flex justify-between items-center border-b border-slate-100 pb-4">
+                <div key={idx} className="flex justify-between items-center mb-2">
                   <div>
                     <h4 className="font-bold text-sm text-slate-800 line-clamp-1">{item.name}</h4>
                     <p className="text-xs text-slate-500">Qty: 1</p>
@@ -237,6 +247,15 @@ const Store = () => {
                   <span className="font-black text-[#0F766E]">₹{item.price.toLocaleString()}</span>
                 </div>
               ))}
+            </div>
+
+            <div className="mb-6 space-y-3">
+              <h3 className="text-sm font-bold text-slate-800">Shipping Address</h3>
+              <input type="text" placeholder="Street Address" value={address.street} onChange={(e) => setAddress({...address, street: e.target.value})} className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-[#0F766E] text-sm" />
+              <div className="grid grid-cols-2 gap-3">
+                <input type="text" placeholder="City" value={address.city} onChange={(e) => setAddress({...address, city: e.target.value})} className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-[#0F766E] text-sm" />
+                <input type="text" placeholder="Pincode" value={address.zipCode} onChange={(e) => setAddress({...address, zipCode: e.target.value})} className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-[#0F766E] text-sm" />
+              </div>
             </div>
             <div className="flex justify-between items-center mb-2">
               <span className="text-slate-500">Subtotal</span>

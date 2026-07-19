@@ -16,7 +16,9 @@ const OrderSuccess = () => {
 
   if (!location.state) return null;
 
-  const { type, providerName, items, totalAmount, orderId } = location.state;
+  const { type, providerName, items, totalAmount, orderId, address } = location.state;
+  const userInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
+  const customerName = userInfo.name || 'Customer';
 
   return (
     <div className="min-h-[85vh] bg-[#F8FAFC] py-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center mt-20">
@@ -62,12 +64,31 @@ const OrderSuccess = () => {
                       ))}
                     </ul>
                     
+                    
                     <div className="flex justify-between items-center pt-4 border-t border-slate-200">
                       <span className="font-bold text-slate-800 text-lg">Total Paid</span>
                       <span className="font-black text-2xl text-[#0F766E]">₹{totalAmount}</span>
                     </div>
                   </div>
                 </div>
+
+                {address && (
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Delivery Details</h3>
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-start gap-4">
+                      <div className="w-10 h-10 bg-teal-50 rounded-full flex items-center justify-center shrink-0">
+                        <MapPin size={20} className="text-[#0F766E]" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-800 mb-1">{customerName}</h4>
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                          {address.street}<br />
+                          {address.city}, {address.state || 'Jharkhand'} - {address.zipCode}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
               </div>
 

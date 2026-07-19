@@ -8,6 +8,29 @@ const BookingFlow = () => {
   const location = useLocation();
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    zipCode: ''
+  });
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+
+  const handleNextStep1 = () => {
+    if (!address.street || !address.city || !address.zipCode) {
+      alert("Please fill in all address fields");
+      return;
+    }
+    setStep(2);
+  };
+
+  const handleNextStep2 = () => {
+    if (!date || !time) {
+      alert("Please select a date and time");
+      return;
+    }
+    setStep(3);
+  };
 
   useEffect(() => {
     const userInfoString = localStorage.getItem('userInfo');
@@ -53,13 +76,13 @@ const BookingFlow = () => {
         body: JSON.stringify({
           service: selectedService.name,
           address: {
-            street: "123 Main St", // using static for demo, normally from step 1 state
-            city: "Ranchi",
-            state: "Jharkhand",
-            zipCode: "834001"
+            street: address.street,
+            city: address.city,
+            state: "Jharkhand", // Default
+            zipCode: address.zipCode
           },
-          scheduledDate: new Date(),
-          timeSlot: "11:00 AM",
+          scheduledDate: date || new Date(),
+          timeSlot: time || "11:00 AM",
           totalAmount: parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) + 49,
           notes: "Please call before coming."
         })
@@ -81,7 +104,8 @@ const BookingFlow = () => {
           providerName: 'SevaSetu Pro',
           items: [{ name: selectedService.name, price: parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) }],
           totalAmount: parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) + 49,
-          orderId: data._id || Math.floor(100000 + Math.random() * 900000)
+          orderId: data._id || Math.floor(100000 + Math.random() * 900000),
+          address: address
         } 
       });
     } catch (error) {
@@ -129,15 +153,14 @@ const BookingFlow = () => {
                 <MapPin className="text-[#0F766E]" /> Service Address
               </h2>
               <div className="space-y-4">
-                <input type="text" placeholder="House/Flat No, Building Name" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
-                <input type="text" placeholder="Street Address / Landmark" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
+                <input type="text" placeholder="Street Address / Landmark" value={address.street} onChange={(e) => setAddress({...address, street: e.target.value})} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
                 <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="City" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
-                  <input type="text" placeholder="Pincode" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
+                  <input type="text" placeholder="City" value={address.city} onChange={(e) => setAddress({...address, city: e.target.value})} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
+                  <input type="text" placeholder="Pincode" value={address.zipCode} onChange={(e) => setAddress({...address, zipCode: e.target.value})} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
                 </div>
               </div>
               <div className="mt-8 flex justify-end">
-                <button onClick={() => setStep(2)} className="bg-[#0F766E] text-white px-8 py-3 rounded-full font-medium hover:bg-[#115E59] transition-colors">
+                <button onClick={handleNextStep1} className="bg-[#0F766E] text-white px-8 py-3 rounded-full font-medium hover:bg-[#115E59] transition-colors">
                   Continue to Schedule
                 </button>
               </div>
@@ -151,25 +174,23 @@ const BookingFlow = () => {
               </h2>
               
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
-                <input type="date" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Select Time Slot</label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM'].map((time, idx) => (
-                    <button key={idx} className="border border-gray-200 rounded-lg py-3 text-gray-700 hover:border-blue-500 hover:bg-teal-50 transition-all focus:bg-[#0F766E] focus:text-white focus:border-blue-600 outline-none">
-                      {time}
-                    </button>
-                  ))}
+                <label className="block text-sm font-medium text-gray-700 mb-2">Select Date & Time</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none" />
+                  <select value={time} onChange={(e) => setTime(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F766E] outline-none bg-white">
+                    <option value="">Select Time</option>
+                    <option>09:00 AM - 11:00 AM</option>
+                    <option>11:00 AM - 01:00 PM</option>
+                    <option>02:00 PM - 04:00 PM</option>
+                    <option>04:00 PM - 06:00 PM</option>
+                  </select>
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-between">
-                <button onClick={() => setStep(1)} className="text-gray-600 px-6 py-3 font-medium hover:text-gray-900">Back</button>
-                <button onClick={() => setStep(3)} className="bg-[#0F766E] text-white px-8 py-3 rounded-full font-medium hover:bg-[#115E59] transition-colors">
-                  Proceed to Pay
+              <div className="flex justify-between">
+                <button onClick={() => setStep(1)} className="text-gray-500 font-medium hover:text-gray-700">Back</button>
+                <button onClick={handleNextStep2} className="bg-[#0F766E] text-white px-8 py-3 rounded-full font-medium hover:bg-[#115E59] transition-colors">
+                  Proceed to Payment
                 </button>
               </div>
             </motion.div>
