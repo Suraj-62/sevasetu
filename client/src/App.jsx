@@ -17,6 +17,7 @@ import VerificationPending from './pages/VerificationPending';
 
 import Store from './pages/Store';
 import ShopDetails from './pages/ShopDetails';
+import OrderSuccess from './pages/OrderSuccess';
 
 import Help from './pages/Help';
 import Faq from './pages/Faq';
@@ -30,8 +31,8 @@ const AppContent = () => {
   const isAuth = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/verification-pending';
   const isServices = location.pathname.startsWith('/services');
   const isNoFooterPage = ['/about', '/contact', '/help', '/faq', '/privacy', '/terms'].includes(location.pathname);
-  const hideNav = isDashboard || isStoreApp || isAuth || location.pathname === '/book';
-  const hideFooter = isDashboard || isStoreApp || isAuth || isServices || isNoFooterPage || location.pathname === '/book';
+  const hideNav = isDashboard || isStoreApp || isAuth || location.pathname === '/book' || location.pathname === '/order-success';
+  const hideFooter = isDashboard || isStoreApp || isAuth || isServices || isNoFooterPage || location.pathname === '/book' || location.pathname === '/order-success';
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -49,6 +50,7 @@ const AppContent = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/book" element={<BookingFlow />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/dashboard/customer" element={<CustomerDashboard />} />
           <Route path="/dashboard/technician" element={<TechnicianDashboard />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />

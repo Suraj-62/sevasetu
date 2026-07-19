@@ -19,8 +19,9 @@ const ServicesList = () => {
 
   const handleBook = (e, service) => {
     e.preventDefault();
-    const userInfo = localStorage.getItem('userInfo');
-    if (!userInfo) {
+    const userInfoString = localStorage.getItem('userInfo');
+    const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
+    if (!userInfo || !userInfo.token) {
       navigate('/login?redirect=/book', { state: { service } });
     } else {
       navigate('/book', { state: { service } });

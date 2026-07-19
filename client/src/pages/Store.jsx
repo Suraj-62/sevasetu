@@ -111,7 +111,8 @@ const Store = () => {
   const handleCheckout = async () => {
     setIsProcessing(true);
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const userInfoString = localStorage.getItem('userInfo');
+      const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
       const token = userInfo?.token;
       
       if (!token) {
@@ -151,10 +152,20 @@ const Store = () => {
 
       if (!response.ok) throw new Error("Failed to place order");
 
+      const data = await response.json();
       setCart([]);
       setShowCheckout(false);
-      setToastMessage('Order placed successfully! Check Dashboard.');
-      setTimeout(() => setToastMessage(''), 3000);
+      
+      // Navigate to order success screen
+      navigate('/order-success', { 
+        state: { 
+          type: 'marketplace',
+          providerName: cart[0].vendor,
+          items: orderItems.map(item => ({ name: item.product, price: item.priceAtPurchase, qty: item.quantity })),
+          totalAmount: totalAmount + 99,
+          orderId: data._id || Math.floor(100000 + Math.random() * 900000)
+        } 
+      });
     } catch (error) {
       console.error(error);
       alert("Error placing order");

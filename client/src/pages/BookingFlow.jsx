@@ -10,11 +10,18 @@ const BookingFlow = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (!userInfo) {
-      navigate('/login?redirect=/book');
+    const userInfoString = localStorage.getItem('userInfo');
+    let hasToken = false;
+    if (userInfoString) {
+      try {
+        const parsed = JSON.parse(userInfoString);
+        if (parsed?.token) hasToken = true;
+      } catch (e) {}
     }
-  }, [navigate]);
+    if (!hasToken) {
+      navigate('/login?redirect=/book', { state: location.state });
+    }
+  }, [navigate, location.state]);
 
   // Try to get service from state, fallback to default if accessed directly
   const selectedService = location.state?.service || {
@@ -66,7 +73,17 @@ const BookingFlow = () => {
       console.log("Booking created:", data);
       
       setIsProcessing(false);
-      setStep(4); // Success step
+      
+      // Navigate to order success screen
+      navigate('/order-success', { 
+        state: { 
+          type: 'service',
+          providerName: 'SevaSetu Pro',
+          items: [{ name: selectedService.name, price: parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) }],
+          totalAmount: parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) + 49,
+          orderId: data._id || Math.floor(100000 + Math.random() * 900000)
+        } 
+      });
     } catch (error) {
       console.error(error);
       alert("Error booking service");
@@ -87,12 +104,12 @@ const BookingFlow = () => {
               style={{ width: `${((step - 1) / 3) * 100}%` }}
             ></div>
             
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3].map((s) => (
               <div 
                 key={s} 
                 className={`w-8 h-8 rounded-full flex items-center justify-center z-10 font-bold ${step >= s ? 'bg-[#0F766E] text-white' : 'bg-gray-200 text-gray-500'}`}
               >
-                {s === 4 ? <CheckCircle size={16} /> : s}
+                {s}
               </div>
             ))}
           </div>
@@ -194,20 +211,6 @@ const BookingFlow = () => {
                   {isProcessing ? 'Processing...' : 'Pay with Razorpay'}
                 </button>
               </div>
-            </motion.div>
-          )}
-
-          {step === 4 && (
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-6">
-                <CheckCircle size={40} />
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
-              <p className="text-gray-600 mb-8">Your booking ID is #BKG-{Math.floor(100000 + Math.random() * 900000)}. You can track your technician on your dashboard.</p>
-              
-              <Link to="/dashboard/customer" className="bg-[#0F766E] text-white px-8 py-3 rounded-full font-medium hover:bg-[#115E59] transition-colors inline-block shadow-md">
-                Go to Dashboard
-              </Link>
             </motion.div>
           )}
 
