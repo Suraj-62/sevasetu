@@ -25,9 +25,11 @@ const TechnicianDashboard = () => {
   const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || { name: 'Technician' });
   const [isEmergencyOn, setIsEmergencyOn] = useState(true);
   const [jobs, setJobs] = useState([]);
+  const [pendingJobs, setPendingJobs] = useState([]);
 
   useEffect(() => {
     fetchJobs();
+    fetchPendingJobs();
   }, []);
 
   const fetchJobs = async () => {
@@ -44,6 +46,44 @@ const TechnicianDashboard = () => {
       }
     } catch (error) {
       console.error("Failed to fetch jobs", error);
+    }
+  };
+
+  const fetchPendingJobs = async () => {
+    try {
+      const token = userInfo?.token;
+      if (!token) return;
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/bookings/pending`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPendingJobs(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch pending jobs", error);
+    }
+  };
+
+  const acceptJob = async (id) => {
+    try {
+      const token = userInfo?.token;
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/bookings/${id}/accept`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        alert("Job Accepted!");
+        fetchJobs(); // Update my schedule
+        fetchPendingJobs(); // Remove from open jobs
+      } else {
+        const err = await res.json();
+        alert(err.message || "Failed to accept job.");
+      }
+    } catch (error) {
+      console.error("Failed to accept job", error);
     }
   };
 
@@ -253,27 +293,27 @@ const TechnicianDashboard = () => {
                 <button className="text-[11px] font-bold text-indigo-600 hover:underline">View All</button>
               </div>
               <div className="space-y-4">
-                {[
-                  { title: 'AC Repair', loc: 'Ranchi, Jharkhand', dist: '1.2 km away', price: '₹350', icon: Wrench, color: 'text-blue-500', bg: 'bg-teal-50' },
-                  { title: 'Electrical Inspection', loc: 'Ranchi, Jharkhand', dist: '1.8 km away', price: '₹250', icon: Power, color: 'text-amber-500', bg: 'bg-amber-50' },
-                  { title: 'Fan Repair', loc: 'Ranchi, Jharkhand', dist: '2.5 km away', price: '₹150', icon: Activity, color: 'text-slate-700', bg: 'bg-slate-100' },
-                ].map((job, i) => (
-                  <div key={i} className="flex gap-4 items-center bg-white border border-slate-100 rounded-2xl p-4 shadow-[0_2px_10px_rgb(0,0,0,0.02)] hover:shadow-md transition-shadow">
-                    <div className={`w-10 h-10 rounded-xl ${job.bg} ${job.color} flex items-center justify-center shrink-0`}>
-                      <job.icon size={18} />
+                {pendingJobs.length === 0 ? (
+                  <p className="text-center text-slate-500 text-[11px] py-4">No pending jobs in your area.</p>
+                ) : (
+                  pendingJobs.slice(0, 3).map((job) => (
+                    <div key={job._id} className="flex gap-4 items-center bg-white border border-slate-100 rounded-2xl p-4 shadow-[0_2px_10px_rgb(0,0,0,0.02)] hover:shadow-md transition-shadow">
+                      <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+                        <Wrench size={18} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[11px] font-bold text-slate-800 truncate">{job.service}</h4>
+                        <p className="text-[9px] text-slate-500 truncate">{job.address?.city || 'Ranchi, Jharkhand'}</p>
+                        <p className="text-[9px] font-bold text-indigo-500 mt-0.5">{job.timeSlot || 'Anytime'}</p>
+                      </div>
+                      <div className="text-right flex flex-col items-end justify-between h-full">
+                        <span className="text-xs font-black text-slate-800 block mb-0.5">₹{job.totalAmount}</span>
+                        <span className="text-[8px] text-slate-400 block mb-2 font-medium">Est. 1h</span>
+                        <button onClick={() => acceptJob(job._id)} className="bg-indigo-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-lg hover:bg-indigo-700 shadow-sm transition-colors">Accept</button>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-[11px] font-bold text-slate-800 truncate">{job.title}</h4>
-                      <p className="text-[9px] text-slate-500 truncate">{job.loc}</p>
-                      <p className="text-[9px] font-bold text-indigo-500 mt-0.5">{job.dist}</p>
-                    </div>
-                    <div className="text-right flex flex-col items-end justify-between h-full">
-                      <span className="text-xs font-black text-slate-800 block mb-0.5">{job.price}</span>
-                      <span className="text-[8px] text-slate-400 block mb-2 font-medium">Est. 1h</span>
-                      <button className="bg-indigo-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-lg hover:bg-indigo-700 shadow-sm transition-colors">Accept</button>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
               <button className="w-full mt-auto pt-4 text-[11px] font-bold text-indigo-600 py-2 hover:bg-indigo-50 border border-slate-100 rounded-xl transition-colors">View More Jobs</button>
             </div>
@@ -325,6 +365,70 @@ const TechnicianDashboard = () => {
               </div>
             </div>
           </div>
+        </motion.div>
+      );
+    }
+    if (activeTab === 'Booking Requests') {
+      return (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 max-w-6xl mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-black text-slate-800">Booking Requests</h2>
+              <p className="text-slate-500 font-medium">Accept pending jobs in your area</p>
+            </div>
+            <button onClick={fetchPendingJobs} className="bg-white border border-slate-200 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm shadow-sm hover:bg-slate-50 transition-colors flex items-center gap-2">
+              Refresh List
+            </button>
+          </div>
+
+          {pendingJobs.length === 0 ? (
+            <div className="bg-white rounded-[2rem] p-12 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center min-h-[400px]">
+               <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                 <MapPin size={40} className="text-slate-300" />
+               </div>
+               <h3 className="text-xl font-bold text-slate-700 mb-2">No pending requests</h3>
+               <p className="text-slate-500 mb-6 max-w-sm mx-auto">There are currently no new booking requests in your service area. We will notify you when new jobs arrive.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pendingJobs.map((job) => (
+                <div key={job._id} className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500"></div>
+                  
+                  <div className="flex justify-between items-start mb-4">
+                     <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
+                       <Wrench className="text-indigo-600" size={24} />
+                     </div>
+                     <span className="bg-indigo-50 text-indigo-600 font-bold px-3 py-1 rounded-lg text-[10px] uppercase tracking-wider">
+                       New Request
+                     </span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-slate-800 mb-2">{job.service}</h3>
+                  <div className="space-y-3 mb-6 flex-1">
+                    <div className="flex items-center gap-2 text-slate-500">
+                       <MapPin size={14} className="text-slate-400" />
+                       <span className="text-sm font-medium truncate">{job.address?.street}, {job.address?.city}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-slate-500">
+                       <CalendarDays size={14} className="text-slate-400" />
+                       <span className="text-sm font-medium">{job.scheduledDate ? new Date(job.scheduledDate).toLocaleDateString() : 'ASAP'} • {job.timeSlot || 'Anytime'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-slate-500">
+                       <DollarSign size={14} className="text-slate-400" />
+                       <span className="text-sm font-bold text-slate-700">₹{job.totalAmount} Estimated</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-4 flex gap-3">
+                     <button onClick={() => acceptJob(job._id)} className="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm text-sm">
+                        Accept Job
+                     </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </motion.div>
       );
     }
