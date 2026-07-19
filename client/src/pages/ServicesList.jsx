@@ -17,13 +17,13 @@ const ServicesList = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const navigate = useNavigate();
 
-  const handleBook = (e) => {
+  const handleBook = (e, service) => {
     e.preventDefault();
     const userInfo = localStorage.getItem('userInfo');
     if (!userInfo) {
-      navigate('/login?redirect=/book');
+      navigate('/login?redirect=/book', { state: { service } });
     } else {
-      navigate('/book');
+      navigate('/book', { state: { service } });
     }
   };
 
@@ -109,7 +109,7 @@ const ServicesList = () => {
                   
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                     <span className="text-2xl font-bold text-gray-900">{service.price}</span>
-                    <button onClick={handleBook} className="bg-teal-50 text-[#0F766E] hover:bg-[#0F766E] hover:text-white px-6 py-2 rounded-full font-medium transition-colors">
+                    <button onClick={(e) => handleBook(e, service)} className="bg-teal-50 text-[#0F766E] hover:bg-[#0F766E] hover:text-white px-6 py-2 rounded-full font-medium transition-colors">
                       Book Now
                     </button>
                   </div>

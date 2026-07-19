@@ -39,7 +39,7 @@ const Login = () => {
       localStorage.setItem('userInfo', JSON.stringify(data));
       
       if (redirect) {
-        navigate(redirect);
+        navigate(redirect, { state: location.state });
       } else {
         if (data.role === 'admin') navigate('/dashboard/admin');
         else if (data.role === 'technician') navigate('/dashboard/technician');

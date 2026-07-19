@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle } from 'lucide-react';
 
 const BookingFlow = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -15,7 +16,8 @@ const BookingFlow = () => {
     }
   }, [navigate]);
 
-  const mockService = {
+  // Try to get service from state, fallback to default if accessed directly
+  const selectedService = location.state?.service || {
     name: "AC Servicing",
     price: 499,
     time: "1 hr"
@@ -42,7 +44,7 @@ const BookingFlow = () => {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          service: mockService.name,
+          service: selectedService.name,
           address: {
             street: "123 Main St", // using static for demo, normally from step 1 state
             city: "Ranchi",
@@ -51,7 +53,7 @@ const BookingFlow = () => {
           },
           scheduledDate: new Date(),
           timeSlot: "11:00 AM",
-          totalAmount: mockService.price + 49,
+          totalAmount: parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) + 49,
           notes: "Please call before coming."
         })
       });
@@ -165,10 +167,10 @@ const BookingFlow = () => {
               <div className="bg-gray-50 rounded-xl p-6 mb-6">
                 <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-200">
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900">{mockService.name}</h3>
-                    <p className="text-sm text-gray-500 flex items-center gap-1"><Clock size={14} /> Estimated {mockService.time}</p>
+                    <h3 className="font-bold text-lg text-gray-900">{selectedService.name}</h3>
+                    <p className="text-sm text-gray-500 flex items-center gap-1"><Clock size={14} /> Estimated {selectedService.time}</p>
                   </div>
-                  <span className="font-bold text-lg text-gray-900">₹{mockService.price}</span>
+                  <span className="font-bold text-lg text-gray-900">₹{parseInt(selectedService.price.toString().replace(/[^0-9]/g, ''))}</span>
                 </div>
                 
                 <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
@@ -178,7 +180,7 @@ const BookingFlow = () => {
                 
                 <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
                   <span className="font-bold text-lg text-gray-900">Total to Pay</span>
-                  <span className="font-bold text-xl text-[#0F766E]">₹{mockService.price + 49}</span>
+                  <span className="font-bold text-xl text-[#0F766E]">₹{parseInt(selectedService.price.toString().replace(/[^0-9]/g, '')) + 49}</span>
                 </div>
               </div>
 
