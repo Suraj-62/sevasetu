@@ -1,7 +1,35 @@
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.firstName || !formData.email || !formData.message) return;
+    
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      // Reset after showing success
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ firstName: '', lastName: '', email: '', message: '' });
+      }, 5000);
+    }, 1500);
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] pt-32 pb-24 font-sans text-[#0F172A]">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
@@ -79,58 +107,106 @@ const Contact = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-[#E2E8F0]">
-              <h3 className="text-2xl font-bold mb-8">Send us a message</h3>
-              
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-[#475569] mb-2">First Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Enter your first name" 
-                      className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-[#475569] mb-2">Last Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Enter your last name" 
-                      className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors"
-                    />
-                  </div>
-                </div>
+            <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-[#E2E8F0] min-h-[500px] flex flex-col justify-center">
+              <AnimatePresence mode="wait">
+                {isSubmitted ? (
+                  <motion.div 
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col items-center justify-center text-center py-10"
+                  >
+                    <div className="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mb-6">
+                      <CheckCircle className="text-[#0F766E]" size={40} />
+                    </div>
+                    <h3 className="text-3xl font-black text-slate-900 mb-4">Message Sent!</h3>
+                    <p className="text-slate-500 text-lg max-w-md mx-auto">
+                      Thank you for reaching out to us. Our support team will get back to you at <span className="font-bold text-slate-800">{formData.email}</span> within 24 hours.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <h3 className="text-2xl font-bold mb-8">Send us a message</h3>
+                    
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-[#475569] mb-2">First Name *</label>
+                          <input 
+                            type="text"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter your first name" 
+                            className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-[#475569] mb-2">Last Name</label>
+                          <input 
+                            type="text" 
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            placeholder="Enter your last name" 
+                            className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors"
+                          />
+                        </div>
+                      </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-[#475569] mb-2">Email Address</label>
-                  <input 
-                    type="email" 
-                    placeholder="Enter your email" 
-                    className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors"
-                  />
-                </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-[#475569] mb-2">Email Address *</label>
+                        <input 
+                          type="email" 
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          placeholder="Enter your email" 
+                          className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors"
+                        />
+                      </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-[#475569] mb-2">Message</label>
-                  <textarea 
-                    rows={5}
-                    placeholder="How can we help you?" 
-                    className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors resize-none"
-                  ></textarea>
-                </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-[#475569] mb-2">Message *</label>
+                        <textarea 
+                          rows={5}
+                          name="message"
+                          value={formData.message}
+                          onChange={handleChange}
+                          required
+                          placeholder="How can we help you?" 
+                          className="w-full px-5 py-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#0F766E] transition-colors resize-none"
+                        ></textarea>
+                      </div>
 
-                <button 
-                  type="submit"
-                  className="w-full bg-[#0F766E] hover:bg-[#115E59] text-white py-4 rounded-xl font-bold text-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <Send size={20} />
-                  Send Message
-                </button>
-              </form>
+                      <button 
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-[#0F766E] hover:bg-[#115E59] text-white py-4 rounded-xl font-bold text-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+                      >
+                        {isSubmitting ? (
+                          <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <>
+                            <Send size={20} />
+                            Send Message
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
-
         </div>
       </div>
     </div>
