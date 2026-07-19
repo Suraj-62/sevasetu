@@ -9,6 +9,19 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const userInfoString = localStorage.getItem('userInfo');
+  let user = null;
+  if (userInfoString) {
+    try {
+      user = JSON.parse(userInfoString);
+    } catch (e) {}
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('userInfo');
+    navigate('/login');
+  };
+
   // Handle scroll effect for sticky navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -60,18 +73,37 @@ const Navbar = () => {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Link 
-              to="/login"
-              className="text-[15px] font-bold text-slate-700 hover:text-[#0F766E] transition-colors px-4 py-2"
-            >
-              Login
-            </Link>
-            <Link 
-              to="/register"
-              className="bg-[#0F766E] hover:bg-[#115E59] text-white text-[15px] font-bold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
-            >
-              Sign Up
-            </Link>
+            {user?.token ? (
+              <>
+                <Link 
+                  to={user.role === 'customer' ? '/dashboard/customer' : user.role === 'technician' ? '/dashboard/technician' : '/'}
+                  className="text-[15px] font-bold text-[#0F766E] hover:text-[#115E59] transition-colors px-4 py-2"
+                >
+                  Dashboard
+                </Link>
+                <button 
+                  onClick={handleLogout}
+                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[15px] font-bold px-6 py-2.5 rounded-xl transition-all"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  to="/login"
+                  className="text-[15px] font-bold text-slate-700 hover:text-[#0F766E] transition-colors px-4 py-2"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register"
+                  className="bg-[#0F766E] hover:bg-[#115E59] text-white text-[15px] font-bold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -109,20 +141,40 @@ const Navbar = () => {
               ))}
               <div className="h-px w-full bg-slate-100 my-2"></div>
               <div className="flex flex-col gap-4">
-                <Link 
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="w-full text-center text-lg font-bold text-slate-700 hover:text-[#0F766E] transition-colors py-3 bg-slate-50 rounded-xl"
-                >
-                  Login
-                </Link>
-                <Link 
-                  to="/register"
-                  onClick={() => setIsOpen(false)}
-                  className="w-full text-center bg-[#0F766E] hover:bg-[#115E59] text-white text-lg font-bold py-3 rounded-xl shadow-sm"
-                >
-                  Sign Up
-                </Link>
+                {user?.token ? (
+                  <>
+                    <Link 
+                      to={user.role === 'customer' ? '/dashboard/customer' : user.role === 'technician' ? '/dashboard/technician' : '/'}
+                      onClick={() => setIsOpen(false)}
+                      className="w-full text-center text-lg font-bold text-[#0F766E] py-3 bg-teal-50 rounded-xl"
+                    >
+                      Dashboard
+                    </Link>
+                    <button 
+                      onClick={() => { setIsOpen(false); handleLogout(); }}
+                      className="w-full text-center bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg font-bold py-3 rounded-xl shadow-sm"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link 
+                      to="/login"
+                      onClick={() => setIsOpen(false)}
+                      className="w-full text-center text-lg font-bold text-slate-700 hover:text-[#0F766E] transition-colors py-3 bg-slate-50 rounded-xl"
+                    >
+                      Login
+                    </Link>
+                    <Link 
+                      to="/register"
+                      onClick={() => setIsOpen(false)}
+                      className="w-full text-center bg-[#0F766E] hover:bg-[#115E59] text-white text-lg font-bold py-3 rounded-xl shadow-sm"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

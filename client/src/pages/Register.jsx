@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Briefcase, Store, CheckCircle, ChevronLeft, MapPin, Phone, FileText, Upload, CreditCard, Activity, Package, Star, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const InputField = ({ label, type = 'text', icon: Icon, placeholder, required = false, name, value, onChange }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -57,6 +58,18 @@ const Register = () => {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const userInfoString = localStorage.getItem('userInfo');
+    if (userInfoString) {
+      try {
+        const user = JSON.parse(userInfoString);
+        if (user?.token) {
+          navigate(user.role === 'customer' ? '/dashboard/customer' : user.role === 'technician' ? '/dashboard/technician' : '/dashboard/admin');
+        }
+      } catch (e) {}
+    }
+  }, [navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();

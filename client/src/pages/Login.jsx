@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, ShieldCheck, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +14,22 @@ const Login = () => {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const userInfoString = localStorage.getItem('userInfo');
+    if (userInfoString) {
+      try {
+        const user = JSON.parse(userInfoString);
+        if (user?.token) {
+          if (redirect) {
+            navigate(redirect, { state: location.state });
+          } else {
+            navigate(user.role === 'customer' ? '/dashboard/customer' : user.role === 'technician' ? '/dashboard/technician' : '/dashboard/admin');
+          }
+        }
+      } catch (e) {}
+    }
+  }, [navigate, redirect, location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
